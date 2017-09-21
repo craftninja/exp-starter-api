@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "test": "mocha --recursive"
   },
   "dependencies": {
     "body-parser": "~1.17.1",
@@ -11,5 +12,10 @@
     "debug": "~2.6.3",
     "express": "~4.15.2",
     "morgan": "~1.8.1"
+  },
+  "devDependencies": {
+    "expect": "^21.1.0",
+    "mocha": "^3.5.3",
+    "supertest": "^3.0.0"
   }
 }
