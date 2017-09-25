@@ -3,17 +3,23 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "db:migrate": "node postgrator.js",
+    "db:migrate:test": "NODE_ENV=test node postgrator.js",
     "start": "node ./bin/www",
     "test": "mocha --recursive"
   },
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "body-parser": "~1.17.1",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.3",
     "express": "~4.15.2",
-    "morgan": "~1.8.1"
+    "morgan": "~1.8.1",
+    "pg": "^7.3.0",
+    "postgrator": "^2.10.2"
   },
   "devDependencies": {
+    "dotenv": "^4.0.0",
     "expect": "^21.1.0",
     "mocha": "^3.5.3",
     "supertest": "^3.0.0"
