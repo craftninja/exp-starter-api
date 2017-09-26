@@ -374,3 +374,95 @@ We left the users route returning an empty array. Let's update that test and dri
       res.json({ users: serializedUsers });
     },
     ```
+
+#### Users can log in and receive a JWT
+1. Add a `features/authentication.test.js` with the following content:
+    ```js
+    const expect = require('expect');
+    const request = require('supertest');
+
+    require('../helpers')
+
+    const app = require('../../app');
+
+    const User = require('../../models/user')
+
+    describe('Authentication - ', () => {
+      it('users can log in and receive a JWT', async () => {
+        const userParams = {
+          firstName: 'Elowyn',
+          lastName: 'Platzer Bartel',
+          email: 'elowyn@example.com',
+          birthYear: 2015,
+          student: true,
+          password: 'password',
+        };
+
+        const user = await User.create(userParams);
+        const res = await request(app)
+          .post('/login')
+          .send({ email: 'elowyn@example.com', password: 'password' })
+          .expect(200);
+        expect(res.body.jwt).not.toBe(undefined);
+        expect(res.body.user).toEqual({
+          id: user.id,
+          firstName: 'Elowyn',
+          lastName: 'Platzer Bartel',
+          email: 'elowyn@example.com',
+          birthYear: 2015,
+          student: true,
+        });
+        expect(res.body.passwordDigest).toEqual(undefined);
+        expect(res.body.createdAt).toEqual(undefined);
+        expect(res.body.updatedAt).toEqual(undefined);
+      });
+    });
+    ```
+1. Add the login route to app.js, and the login route file with the following content:
+    ```js
+    const express = require('express');
+    const router = express.Router();
+
+    const loginController = require('../controllers/login')
+
+    router.post('/', loginController.create);
+
+    module.exports = router;
+    ```
+1. Add the login controller with the following content:
+    ```js
+    const User = require('../models/user');
+
+    exports.create = async (req, res, next) => {
+      res.json(await User.authenticate(req.body));
+    };
+    ```
+1. Add the authenticate method to the User model:
+    ```js
+    authenticate: async credentials => {
+      const user = (await query('SELECT * FROM "users" WHERE "email" = ($1)', [
+        credentials.email,
+      ])).rows[0];
+
+      const valid = user
+        ? await bcrypt.compare(credentials.password, user.passwordDigest)
+        : false;
+      if (valid) {
+        const serializedUser = await userSerializer(user);
+        const token = jwt.sign({ user: serializedUser }, process.env.JWT_SECRET);
+        return Promise.resolve({
+          jwt: token,
+          user: serializedUser,
+        });
+      } else {
+        return Promise.resolve({ error: 'Email or Password is incorrect' });
+      }
+    },
+    ```
+
+#### Require Authentication for the User index
+We don't want to allow just anybody to get a list of users. Let's lock this route down.
+1. Update the user index feature test:
+    ```js
+
+    ```
