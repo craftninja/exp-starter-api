@@ -1,6 +1,8 @@
 const expect = require('expect');
 const request = require('supertest');
 
+require('../helpers')
+
 const app = require('../../app');
 
 describe('Root of API', () => {

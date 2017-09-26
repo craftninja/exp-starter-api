@@ -1,6 +1,8 @@
 const expect = require('expect');
 const request = require('supertest');
 
+require('../helpers');
+
 const User = require('../../models/user.js')
 
 describe('User', () => {

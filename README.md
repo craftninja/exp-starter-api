@@ -1,5 +1,7 @@
 # README
 
+### [curl docs](./curl.md)
+
 ### set it up
 
 1. `$ yarn install`
@@ -260,3 +262,67 @@
         await query('delete from "users"');
       };
       ```
+#### Add signup route
+1. Write the test in `features/users.test.js`:
+    ```js
+    it('can signup and receive a JWT', async () => {
+      const res = await request(app)
+        .post('/users')
+        .send({
+          firstName: 'Elowyn',
+          lastName: 'Platzer Bartel',
+          email: 'elowyn@example.com',
+          birthYear: 2015,
+          student: true,
+          password: 'password',
+        })
+        .expect(200);
+
+      expect(res.body.jwt).not.toBe(undefined);
+      expect(res.body.user.id).not.toBe(undefined);
+      expect(res.body.user.firstName).toEqual('Elowyn');
+      expect(res.body.user.lastName).toEqual('Platzer Bartel');
+      expect(res.body.user.email).toEqual('elowyn@example.com');
+      expect(res.body.user.birthYear).toEqual(2015);
+      expect(res.body.user.student).toEqual(true);
+      expect(res.body.passwordDigest).toEqual(undefined);
+      expect(res.body.createdAt).toEqual(undefined);
+      expect(res.body.updatedAt).toEqual(undefined);
+    });
+    ```
+1. Add to the users routes: `router.post('/', usersController.create);` and `const usersController = require('../controllers/users')` at the top
+1. Create the `controllers/user` with the following content:
+    ```js
+    const jwt = require('jsonwebtoken');
+
+    const userSerializer = require('../serializers/user');
+    const User = require('../models/user');
+
+    module.exports = {
+      create: async (req, res, next) => {
+        const user = await User.create(req.body);
+        const serializedUser = await userSerializer(user);
+        const token = jwt.sign({ user: serializedUser }, process.env.JWT_SECRET);
+        res.json({ jwt: token, user: serializedUser });
+      }
+    }
+    ```
+1. Add the `JWT_SECRET` to the `.env.example` and `.env`. Value doesn't really matter as long as it's the same to encode and decode the JWTs
+1. `$ yarn add jsonwebtoken`
+1. You will likely or eventually need to require `helpers.js` at the top of each test file (above everything except the package dependencies). If all tests are run, you will only need it to be required in a preceding run file, but if you run a single test `yarn test test/models/user.test.js` you will be missing that requirement.
+1. Add `serializers/user.js` with the following content:
+    ```js
+    module.exports = async user => {
+      const serialized = {
+        id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        birthYear: user.birthYear,
+        student: user.student,
+      };
+      return serialized;
+    };
+    ```
+1. Try curling the signup route ([see curl docs](../curl.md))
+    * add `if (process.env.NODE_ENV !== 'production') { require('dotenv').config() }` to the top of the bin/www file and restart the server if needed
