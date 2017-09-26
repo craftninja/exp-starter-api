@@ -199,7 +199,7 @@
         if (process.env.NODE_ENV === 'test') {
           process.env.DATABASE_URL = process.env.TEST_DATABASE_URL;
         }
-        let postgrator = require('postgrator');
+        const postgrator = require('postgrator');
 
         postgrator.setConfig({
           migrationDirectory: __dirname + '/migrations',
@@ -526,7 +526,7 @@ We don't want to allow just anybody to get a list of users. Let's lock this rout
       try {
         currentUser(token);
       } catch (e) {
-        let err = new Error('Not Found');
+        const err = new Error('Not Found');
         err.status = 404;
         next(err);
       }
@@ -541,3 +541,7 @@ We don't want to allow just anybody to get a list of users. Let's lock this rout
       return jwt.verify(token, process.env.JWT_SECRET).user;
     };
     ```
+
+#### Uniformity refactor
+* Refactored `var`s into `const`s (and `let`s where necessary)
+* Refactored module.exports to exports.method
