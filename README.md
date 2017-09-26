@@ -312,7 +312,7 @@
 1. You will likely or eventually need to require `helpers.js` at the top of each test file (above everything except the package dependencies). If all tests are run, you will only need it to be required in a preceding run file, but if you run a single test `yarn test test/models/user.test.js` you will be missing that requirement.
 1. Add `serializers/user.js` with the following content:
     ```js
-    module.exports = async user => {
+    module.exports = user => {
       const serialized = {
         id: user.id,
         firstName: user.firstName,
@@ -326,3 +326,51 @@
     ```
 1. Try curling the signup route ([see curl docs](../curl.md))
     * add `if (process.env.NODE_ENV !== 'production') { require('dotenv').config() }` to the top of the bin/www file and restart the server if needed
+
+#### Update the users route
+We left the users route returning an empty array. Let's update that test and drive the rewrite to make this actually query the database.
+1. Update the feature test for users index:
+    ```js
+    it('can be listed, without users and with one added', async () => {
+      const resNoUsers = await request(app)
+        .get('/users')
+        .expect(200);
+      expect(resNoUsers.body).toEqual({users: []});
+
+      await User.create({
+        firstName: 'Elowyn',
+        lastName: 'Platzer Bartel',
+        email: 'elowyn@example.com',
+        birthYear: 2015,
+        student: true,
+        password: 'password',
+      })
+
+      const resWithUsers = await request(app)
+        .get('/users')
+        .expect(200);
+
+      expect(resWithUsers.body.users.length).toEqual(1);
+      const newUser = resWithUsers.body.users[0]
+      expect(resWithUsers.jwt).toBe(undefined);
+      expect(newUser.id).not.toBe(undefined);
+      expect(newUser.firstName).toEqual('Elowyn');
+      expect(newUser.lastName).toEqual('Platzer Bartel');
+      expect(newUser.email).toEqual('elowyn@example.com');
+      expect(newUser.birthYear).toEqual(2015);
+      expect(newUser.student).toEqual(true);
+      expect(newUser.passwordDigest).toEqual(undefined);
+      expect(newUser.createdAt).toEqual(undefined);
+      expect(newUser.updatedAt).toEqual(undefined);
+    });
+    ```
+1. Require the User model in the top of the test file
+1. Update the users index route to: `router.get('/', usersController.index);`
+1. Update the users controller to add the index action like so:
+    ```js
+    index: async (req, res, next) => {
+      const users = await User.all();
+      const serializedUsers = users.map(user => userSerializer(user));
+      res.json({ users: serializedUsers });
+    },
+    ```

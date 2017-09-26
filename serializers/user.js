@@ -1,4 +1,4 @@
-module.exports = async user => {
+module.exports = user => {
   const serialized = {
     id: user.id,
     firstName: user.firstName,

@@ -3,10 +3,7 @@ const router = express.Router();
 
 const usersController = require('../controllers/users')
 
-router.get('/', function(req, res, next) {
-  res.status(200);
-  res.json({users: []});
-});
+router.get('/', usersController.index);
 
 router.post('/', usersController.create);
 

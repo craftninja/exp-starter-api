@@ -5,6 +5,8 @@ require('../helpers')
 
 const app = require('../../app');
 
+const User = require('../../models/user')
+
 describe('Users', () => {
   it('can signup and receive a JWT', async () => {
     const res = await request(app)
@@ -31,11 +33,36 @@ describe('Users', () => {
     expect(res.body.updatedAt).toEqual(undefined);
   });
 
-  it('index route with no users returns an empty list of users', async () => {
-    const res = await request(app)
+  it('can be listed, without users and with one added', async () => {
+    const resNoUsers = await request(app)
+      .get('/users')
+      .expect(200);
+    expect(resNoUsers.body).toEqual({users: []});
+
+    await User.create({
+      firstName: 'Elowyn',
+      lastName: 'Platzer Bartel',
+      email: 'elowyn@example.com',
+      birthYear: 2015,
+      student: true,
+      password: 'password',
+    })
+
+    const resWithUsers = await request(app)
       .get('/users')
       .expect(200);
 
-    expect(res.body).toEqual({users: []});
+    expect(resWithUsers.body.users.length).toEqual(1);
+    const newUser = resWithUsers.body.users[0]
+    expect(resWithUsers.jwt).toBe(undefined);
+    expect(newUser.id).not.toBe(undefined);
+    expect(newUser.firstName).toEqual('Elowyn');
+    expect(newUser.lastName).toEqual('Platzer Bartel');
+    expect(newUser.email).toEqual('elowyn@example.com');
+    expect(newUser.birthYear).toEqual(2015);
+    expect(newUser.student).toEqual(true);
+    expect(newUser.passwordDigest).toEqual(undefined);
+    expect(newUser.createdAt).toEqual(undefined);
+    expect(newUser.updatedAt).toEqual(undefined);
   });
 });
