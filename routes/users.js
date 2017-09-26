@@ -1,10 +1,13 @@
 const express = require('express');
 const router = express.Router();
 
-const usersController = require('../controllers/users')
-
-router.get('/', usersController.index);
+const usersController = require('../controllers/users');
+const verifyLoggedInUser = require('../lib/verifyLoggedInUser');
 
 router.post('/', usersController.create);
+
+router.use(verifyLoggedInUser);
+
+router.get('/', usersController.index);
 
 module.exports = router;

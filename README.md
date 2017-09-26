@@ -1,5 +1,13 @@
 # README
 
+### todo
+* [ ] prettier
+* [x] signup
+* [x] login
+* [x] users index - only users
+* [ ] users show - only users
+* [ ] users update - only self
+
 ### [curl docs](./curl.md)
 
 ### set it up
@@ -10,7 +18,7 @@
 1. `$ yarn db:migrate`
 1. `$ yarn db:migrate:test`
 1. `$ nodemon start`
-    * `$yarn global add nodemon` if you don't have it... this will restart your server on *most* changes
+    * `$ yarn global add nodemon` if you don't have it... this will restart your server on *most* changes
 
 ### how did this get made?
 
@@ -464,5 +472,72 @@ We left the users route returning an empty array. Let's update that test and dri
 We don't want to allow just anybody to get a list of users. Let's lock this route down.
 1. Update the user index feature test:
     ```js
+    it('can be listed for a logged in user', async () => {
+      const user = await User.create({
+        firstName: 'Elowyn',
+        lastName: 'Platzer Bartel',
+        email: 'elowyn@example.com',
+        birthYear: 2015,
+        student: true,
+        password: 'password',
+      });
+      serializedUser = await userSerializer(user);
+      token = jwt.sign({ user: serializedUser }, process.env.JWT_SECRET);
 
+      const resNotLoggedIn = await request(app)
+      .get('/users')
+      .expect(404);
+
+      const resLoggedIn = await request(app)
+        .get('/users')
+        .set('jwt', token)
+        .expect(200);
+
+      expect(resLoggedIn.body.users.length).toEqual(1);
+      const newUser = resLoggedIn.body.users[0]
+      expect(resLoggedIn.jwt).toBe(undefined);
+      expect(newUser.id).not.toBe(undefined);
+      expect(newUser.firstName).toEqual('Elowyn');
+      expect(newUser.lastName).toEqual('Platzer Bartel');
+      expect(newUser.email).toEqual('elowyn@example.com');
+      expect(newUser.birthYear).toEqual(2015);
+      expect(newUser.student).toEqual(true);
+      expect(newUser.passwordDigest).toEqual(undefined);
+      expect(newUser.createdAt).toEqual(undefined);
+      expect(newUser.updatedAt).toEqual(undefined);
+    });
+    ```
+1. reorder user routes and add the verifyLoggedInUser middleware, required at the top from a `lib/verifyLoggedInUser.js`:
+      ```js
+      router.post('/', usersController.create);
+
+      router.use(verifyLoggedInUser);
+
+      router.get('/', usersController.index);
+      ```
+1. Add the verifyLoggedInUser file with the following content:
+    ```js
+    const jwt = require('jsonwebtoken');
+
+    const currentUser = require('./currentUser');
+
+    module.exports = (req, res, next) => {
+      const token = req.headers.jwt;
+      try {
+        currentUser(token);
+      } catch (e) {
+        let err = new Error('Not Found');
+        err.status = 404;
+        next(err);
+      }
+      next();
+    };
+    ```
+1. Add the currentUser file with the following content:
+    ```js
+    const jwt = require('jsonwebtoken');
+
+    module.exports = token => {
+      return jwt.verify(token, process.env.JWT_SECRET).user;
+    };
     ```

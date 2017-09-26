@@ -1,11 +1,13 @@
 const expect = require('expect');
+const jwt = require('jsonwebtoken');
 const request = require('supertest');
 
 require('../helpers')
 
 const app = require('../../app');
 
-const User = require('../../models/user')
+const User = require('../../models/user');
+const userSerializer = require('../../serializers/user');
 
 describe('Users', () => {
   it('can signup and receive a JWT', async () => {
@@ -33,28 +35,30 @@ describe('Users', () => {
     expect(res.body.updatedAt).toEqual(undefined);
   });
 
-  it('can be listed, without users and with one added', async () => {
-    const resNoUsers = await request(app)
-      .get('/users')
-      .expect(200);
-    expect(resNoUsers.body).toEqual({users: []});
-
-    await User.create({
+  it('can be listed for a logged in user', async () => {
+    const user = await User.create({
       firstName: 'Elowyn',
       lastName: 'Platzer Bartel',
       email: 'elowyn@example.com',
       birthYear: 2015,
       student: true,
       password: 'password',
-    })
+    });
+    serializedUser = await userSerializer(user);
+    token = jwt.sign({ user: serializedUser }, process.env.JWT_SECRET);
 
-    const resWithUsers = await request(app)
+    const resNotLoggedIn = await request(app)
+    .get('/users')
+    .expect(404);
+
+    const resLoggedIn = await request(app)
       .get('/users')
+      .set('jwt', token)
       .expect(200);
 
-    expect(resWithUsers.body.users.length).toEqual(1);
-    const newUser = resWithUsers.body.users[0]
-    expect(resWithUsers.jwt).toBe(undefined);
+    expect(resLoggedIn.body.users.length).toEqual(1);
+    const newUser = resLoggedIn.body.users[0]
+    expect(resLoggedIn.jwt).toBe(undefined);
     expect(newUser.id).not.toBe(undefined);
     expect(newUser.firstName).toEqual('Elowyn');
     expect(newUser.lastName).toEqual('Platzer Bartel');
