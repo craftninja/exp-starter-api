@@ -3,7 +3,7 @@ const request = require('supertest');
 
 require('../helpers');
 
-const User = require('../../models/user.js')
+const User = require('../../models/user.js');
 
 describe('User', () => {
   it('can be created', async () => {
@@ -17,7 +17,7 @@ describe('User', () => {
       birthYear: 2015,
       student: true,
       password: 'password',
-    })
+    });
     const usersAfter = await User.all();
     expect(usersAfter.length).toBe(1);
   });
@@ -30,9 +30,9 @@ describe('User', () => {
       birthYear: 2015,
       student: true,
       password: 'password',
-    })
+    });
 
-    const foundUser = await User.find(user.id)
+    const foundUser = await User.find(user.id);
     expect(foundUser.firstName).toEq('Elowyn');
     expect(foundUser.lastName).toEq('Platzer Bartel');
     expect(foundUser.email).toEq('elowyn@example.com');
@@ -48,9 +48,9 @@ describe('User', () => {
       birthYear: 2015,
       student: true,
       password: 'password',
-    })
+    });
 
-    const foundUser = await User.findBy({email: 'elowyn@example.com'})
+    const foundUser = await User.findBy({ email: 'elowyn@example.com' });
     expect(foundUser.firstName).toEq('Elowyn');
     expect(foundUser.lastName).toEq('Platzer Bartel');
     expect(foundUser.email).toEq('elowyn@example.com');
@@ -66,7 +66,7 @@ describe('User', () => {
       birthYear: 2015,
       student: true,
       password: 'password',
-    })
+    });
     await User.create({
       firstName: 'Signe',
       lastName: 'Alongi',
@@ -74,7 +74,7 @@ describe('User', () => {
       birthYear: 2015,
       student: true,
       password: 'password',
-    })
+    });
     await User.create({
       firstName: 'Alexa',
       lastName: 'Madison',
@@ -82,9 +82,9 @@ describe('User', () => {
       birthYear: 2013,
       student: true,
       password: 'password',
-    })
+    });
 
-    const foundUsers = await User.where({birthYear: 2017})
+    const foundUsers = await User.where({ birthYear: 2017 });
     expect(foundUsers.length).toEq(2);
   });
 });

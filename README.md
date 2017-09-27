@@ -1,7 +1,7 @@
 # README
 
 ### todo
-* [ ] prettier
+* [x] prettier
 * [x] signup
 * [ ] testing for signup fails - user must have unique email
 * [x] login
@@ -22,6 +22,17 @@
 1. `$ yarn db:migrate:test`
 1. `$ nodemon start`
     * `$ yarn global add nodemon` if you don't have it... this will restart your server on *most* changes
+
+### tests and prettier
+Tests
+* `$ yarn test`
+
+Prettier
+1. Finish work, **stage all changes**
+1. `$ yarn prettier` will change files but **not stage those changes**
+1. `$ git add -p` and approve each change you like (y - yes, n - no, s - split the diff, q - quit)
+1. Rerun tests, then commit all approved diffs
+1. `$ git checkout -- .` to discard unapproved diffs
 
 ### how did this get made?
 
@@ -548,3 +559,8 @@ We don't want to allow just anybody to get a list of users. Let's lock this rout
 #### Uniformity refactor
 * Refactored `var`s into `const`s (and `let`s where necessary)
 * Refactored module.exports to exports.method
+
+#### Adding prettier
+1. `$ yarn add prettier --dev`
+1. add script to package.json: `"prettier": "prettier --single-quote --trailing-comma=es5 --list-different --write es5 './**/*.js'",`
+1. run prettier and approve diffs if you like them!

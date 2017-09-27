@@ -1,7 +1,7 @@
 const expect = require('expect');
 const request = require('supertest');
 
-require('../helpers')
+require('../helpers');
 
 const app = require('../../app');
 
@@ -11,7 +11,7 @@ describe('Root of API', () => {
       .get('/')
       .expect(200);
 
-    expect(res.text).toEqual("oh hai");
+    expect(res.text).toEqual('oh hai');
     expect(res.body).toEqual({});
   });
 });

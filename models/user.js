@@ -8,7 +8,7 @@ const userSerializer = require('../serializers/user');
 exports.all = async () => {
   const users = (await query('SELECT * FROM "users"')).rows;
   return users;
-}
+};
 
 exports.authenticate = async credentials => {
   const user = (await query('SELECT * FROM "users" WHERE "email" = ($1)', [
@@ -28,7 +28,7 @@ exports.authenticate = async credentials => {
   } else {
     return Promise.resolve({ error: 'Email or Password is incorrect' });
   }
-}
+};
 
 exports.create = async properties => {
   const saltRounds = 10;
@@ -54,4 +54,4 @@ exports.create = async properties => {
     ]
   )).rows[0];
   return createdUser;
-}
+};

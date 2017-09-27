@@ -1,7 +1,7 @@
 const expect = require('expect');
 const request = require('supertest');
 
-require('../helpers')
+require('../helpers');
 
 const app = require('../../app');
 
@@ -11,10 +11,7 @@ describe('Undefined routes', () => {
       .get('/undefinedRoute')
       .expect(404);
 
-    const errorResponse = {
-      "error": {"status": 404},
-      "message": "Not Found"
-    }
+    const errorResponse = { error: { status: 404 }, message: 'Not Found' };
     expect(res.body).toEqual(errorResponse);
   });
 });

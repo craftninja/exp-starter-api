@@ -2,7 +2,7 @@ const expect = require('expect');
 const jwt = require('jsonwebtoken');
 const request = require('supertest');
 
-require('../helpers')
+require('../helpers');
 
 const app = require('../../app');
 
@@ -48,8 +48,8 @@ describe('Users', () => {
     token = jwt.sign({ user: serializedUser }, process.env.JWT_SECRET);
 
     const resNotLoggedIn = await request(app)
-    .get('/users')
-    .expect(404);
+      .get('/users')
+      .expect(404);
 
     const resLoggedIn = await request(app)
       .get('/users')
@@ -57,7 +57,7 @@ describe('Users', () => {
       .expect(200);
 
     expect(resLoggedIn.body.users.length).toEqual(1);
-    const newUser = resLoggedIn.body.users[0]
+    const newUser = resLoggedIn.body.users[0];
     expect(resLoggedIn.jwt).toBe(undefined);
     expect(newUser.id).not.toBe(undefined);
     expect(newUser.firstName).toEqual('Elowyn');

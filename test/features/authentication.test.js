@@ -1,11 +1,11 @@
 const expect = require('expect');
 const request = require('supertest');
 
-require('../helpers')
+require('../helpers');
 
 const app = require('../../app');
 
-const User = require('../../models/user')
+const User = require('../../models/user');
 
 describe('Authentication - ', () => {
   it('users can log in and receive a JWT', async () => {
