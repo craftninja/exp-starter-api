@@ -3,8 +3,11 @@
 ### todo
 * [ ] prettier
 * [x] signup
+* [ ] testing for signup fails - user must have unique email
 * [x] login
+* [ ] testing for login fails
 * [x] users index - only users
+* [ ] testing for malformed JWT
 * [ ] users show - only users
 * [ ] users update - only self
 
