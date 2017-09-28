@@ -21,22 +21,21 @@ exports.authenticate = async credentials => {
   if (valid) {
     const serializedUser = await userSerializer(user);
     const token = jwt.sign({ user: serializedUser }, process.env.JWT_SECRET);
-    return Promise.resolve({
-      jwt: token,
-      user: serializedUser,
-    });
+    return { jwt: token, user: serializedUser };
   } else {
-    return Promise.resolve({ error: 'Email or Password is incorrect' });
+    return { error: 'Email or Password is incorrect' };
   }
 };
 
 exports.create = async properties => {
   const errors = [];
-  if (await this.findBy({email: properties.email})) {
-    const error = new Error('Email already taken')
+  if (await this.findBy({ email: properties.email })) {
+    const error = new Error('Email already taken');
     errors.push(error);
-  };
-  if (errors.length > 0) { return errors };
+  }
+  if (errors.length > 0) {
+    return errors;
+  }
 
   const saltRounds = 10;
   const salt = bcrypt.genSaltSync(saltRounds);

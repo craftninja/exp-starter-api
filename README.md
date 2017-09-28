@@ -472,12 +472,9 @@ We left the users route returning an empty array. Let's update that test and dri
       if (valid) {
         const serializedUser = await userSerializer(user);
         const token = jwt.sign({ user: serializedUser }, process.env.JWT_SECRET);
-        return Promise.resolve({
-          jwt: token,
-          user: serializedUser,
-        });
+        return { jwt: token, user: serializedUser };
       } else {
-        return Promise.resolve({ error: 'Email or Password is incorrect' });
+        return { error: 'Email or Password is incorrect' };
       }
     },
     ```
