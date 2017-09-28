@@ -618,5 +618,36 @@ We don't want to allow just anybody to get a list of users. Let's lock this rout
 #### User must have a unique email
 1. Add a model test:
     ```js
+    it('must have unique email', async () => {
+      await User.create({
+        firstName: 'Elowyn',
+        lastName: 'Platzer Bartel',
+        email: 'elowyn@example.com',
+        birthYear: 2015,
+        student: true,
+        password: 'password',
+      });
+      const duplicateUser = await User.create({
+        firstName: 'Elowyn',
+        lastName: 'Platzer Bartel',
+        email: 'elowyn@example.com',
+        birthYear: 2015,
+        student: true,
+        password: 'password',
+      });
 
+      expect(duplicateUser).toEqual([new Error('Email already taken')])
+      const users = await User.all();
+      expect(users.length).toBe(1);
+    });
+    ```
+
+1. Add the validation to the User model. Note, for extensibility of validations, add more if statements. Validations will get pushed to the errors array and finally be returned:
+    ```js
+    const errors = [];
+    if (await this.findBy({email: properties.email})) {
+      const error = new Error('Email already taken')
+      errors.push(error);
+    };
+    if (errors.length > 0) { return errors };
     ```

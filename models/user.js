@@ -31,6 +31,13 @@ exports.authenticate = async credentials => {
 };
 
 exports.create = async properties => {
+  const errors = [];
+  if (await this.findBy({email: properties.email})) {
+    const error = new Error('Email already taken')
+    errors.push(error);
+  };
+  if (errors.length > 0) { return errors };
+
   const saltRounds = 10;
   const salt = bcrypt.genSaltSync(saltRounds);
   const passwordDigest = bcrypt.hashSync(properties.password, salt);

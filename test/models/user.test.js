@@ -22,6 +22,29 @@ describe('User', () => {
     expect(usersAfter.length).toBe(1);
   });
 
+  it('must have unique email', async () => {
+    await User.create({
+      firstName: 'Elowyn',
+      lastName: 'Platzer Bartel',
+      email: 'elowyn@example.com',
+      birthYear: 2015,
+      student: true,
+      password: 'password',
+    });
+    const duplicateUser = await User.create({
+      firstName: 'Elowyn',
+      lastName: 'Platzer Bartel',
+      email: 'elowyn@example.com',
+      birthYear: 2015,
+      student: true,
+      password: 'password',
+    });
+
+    expect(duplicateUser).toEqual([new Error('Email already taken')])
+    const users = await User.all();
+    expect(users.length).toBe(1);
+  });
+
   xit('can be found by id', async () => {
     const user = await User.create({
       firstName: 'Elowyn',
