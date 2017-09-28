@@ -564,3 +564,59 @@ We don't want to allow just anybody to get a list of users. Let's lock this rout
 1. `$ yarn add prettier --dev`
 1. add script to package.json: `"prettier": "prettier --single-quote --trailing-comma=es5 --list-different --write es5 './**/*.js'",`
 1. run prettier and approve diffs if you like them!
+
+#### User can be found by a property
+1. Add a model test:
+    ```js
+    it('can be found by property', async () => {
+      const user = await User.create({
+        firstName: 'Elowyn',
+        lastName: 'Platzer Bartel',
+        email: 'elowyn@example.com',
+        birthYear: 2015,
+        student: true,
+        password: 'password',
+      });
+
+      const foundUser = await User.findBy({ email: 'elowyn@example.com' });
+      expect(foundUser.firstName).toEqual('Elowyn');
+      expect(foundUser.lastName).toEqual('Platzer Bartel');
+      expect(foundUser.email).toEqual('elowyn@example.com');
+      expect(foundUser.birthYear).toEqual(2015);
+      expect(foundUser.student).toEqual(true);
+    });
+    ```
+1. Add the method to the User model:
+    ```js
+    exports.findBy = async property => {
+      const key = Object.keys(property)[0];
+      let findByQuery;
+      switch (key) {
+        case 'firstName':
+          findByQuery = 'SELECT * FROM "users" WHERE "firstName" = $1 LIMIT 1';
+          break;
+        case 'lastName':
+          findByQuery = 'SELECT * FROM "users" WHERE "lastName" = $1 LIMIT 1';
+          break;
+        case 'email':
+          findByQuery = 'SELECT * FROM "users" WHERE "email" = $1 LIMIT 1';
+          break;
+        case 'birthYear':
+          findByQuery = 'SELECT * FROM "users" WHERE "birthYear" = $1 LIMIT 1';
+          break;
+        case 'student':
+          findByQuery = 'SELECT * FROM "users" WHERE "student" = $1 LIMIT 1';
+          break;
+      };
+
+      const value = property[key];
+      const user = (await query(findByQuery, [value])).rows[0];
+      return user;
+    };
+    ```
+
+#### User must have a unique email
+1. Add a model test:
+    ```js
+
+    ```
