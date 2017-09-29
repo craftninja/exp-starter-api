@@ -30,9 +30,10 @@ describe('Users', () => {
     expect(res.body.user.email).toEqual('elowyn@example.com');
     expect(res.body.user.birthYear).toEqual(2015);
     expect(res.body.user.student).toEqual(true);
-    expect(res.body.passwordDigest).toEqual(undefined);
-    expect(res.body.createdAt).toEqual(undefined);
-    expect(res.body.updatedAt).toEqual(undefined);
+
+    expect(res.body.user.passwordDigest).toEqual(undefined);
+    expect(res.body.user.createdAt).toEqual(undefined);
+    expect(res.body.user.updatedAt).toEqual(undefined);
   });
 
   it('can be listed for a logged in user', async () => {
@@ -65,6 +66,7 @@ describe('Users', () => {
     expect(newUser.email).toEqual('elowyn@example.com');
     expect(newUser.birthYear).toEqual(2015);
     expect(newUser.student).toEqual(true);
+
     expect(newUser.passwordDigest).toEqual(undefined);
     expect(newUser.createdAt).toEqual(undefined);
     expect(newUser.updatedAt).toEqual(undefined);

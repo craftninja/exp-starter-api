@@ -24,7 +24,7 @@ exports.authenticate = async credentials => {
     const token = jwt.sign({ user: serializedUser }, process.env.JWT_SECRET);
     return { jwt: token, user: serializedUser };
   } else {
-    return { error: 'Email or Password is incorrect' };
+    return { errors: ['Email or Password is incorrect'] };
   }
 };
 

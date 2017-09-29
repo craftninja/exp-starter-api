@@ -306,9 +306,10 @@ Prettier
       expect(res.body.user.email).toEqual('elowyn@example.com');
       expect(res.body.user.birthYear).toEqual(2015);
       expect(res.body.user.student).toEqual(true);
-      expect(res.body.passwordDigest).toEqual(undefined);
-      expect(res.body.createdAt).toEqual(undefined);
-      expect(res.body.updatedAt).toEqual(undefined);
+
+      expect(res.body.user.passwordDigest).toEqual(undefined);
+      expect(res.body.user.createdAt).toEqual(undefined);
+      expect(res.body.user.updatedAt).toEqual(undefined);
     });
     ```
 1. Add to the users routes: `router.post('/', usersController.create);` and `const usersController = require('../controllers/users')` at the top
@@ -380,6 +381,7 @@ We left the users route returning an empty array. Let's update that test and dri
       expect(newUser.email).toEqual('elowyn@example.com');
       expect(newUser.birthYear).toEqual(2015);
       expect(newUser.student).toEqual(true);
+
       expect(newUser.passwordDigest).toEqual(undefined);
       expect(newUser.createdAt).toEqual(undefined);
       expect(newUser.updatedAt).toEqual(undefined);
@@ -433,9 +435,9 @@ We left the users route returning an empty array. Let's update that test and dri
           birthYear: 2015,
           student: true,
         });
-        expect(res.body.passwordDigest).toEqual(undefined);
-        expect(res.body.createdAt).toEqual(undefined);
-        expect(res.body.updatedAt).toEqual(undefined);
+        expect(res.body.user.passwordDigest).toEqual(undefined);
+        expect(res.body.user.createdAt).toEqual(undefined);
+        expect(res.body.user.updatedAt).toEqual(undefined);
       });
     });
     ```
@@ -473,7 +475,7 @@ We left the users route returning an empty array. Let's update that test and dri
         const token = jwt.sign({ user: serializedUser }, process.env.JWT_SECRET);
         return { jwt: token, user: serializedUser };
       } else {
-        return { error: 'Email or Password is incorrect' };
+        return { errors: ['Email or Password is incorrect'] };
       }
     },
     ```
@@ -687,5 +689,35 @@ We don't want to allow just anybody to get a list of users. Let's lock this rout
 
       const user = currentUser(invalidToken);
       expect(user).toEqual(undefined);
+    });
+    ```
+1. Add tests for user login sad path (auth feature test):
+    ```js
+    it('users cannot login without valid credentials', async () => {
+      const userParams = {
+        firstName: 'Elowyn',
+        lastName: 'Platzer Bartel',
+        email: 'elowyn@example.com',
+        birthYear: 2015,
+        student: true,
+        password: 'password',
+      };
+
+      const user = await User.create(userParams);
+      const wrongPasswordRes = await request(app)
+        .post('/login')
+        .send({ email: 'elowyn@example.com', password: 'wrong password' })
+        .expect(200);
+      expect(wrongPasswordRes.body.jwt).toBe(undefined);
+      expect(wrongPasswordRes.body.user).toEqual(undefined);
+      expect(wrongPasswordRes.body.error).toEqual(['Email or Password is incorrect']);
+
+      const noUserRes = await request(app)
+        .post('/login')
+        .send({ email: 'wrongEmail@example.com', password: 'password' })
+        .expect(200);
+      expect(noUserRes.body.jwt).toBe(undefined);
+      expect(noUserRes.body.user).toEqual(undefined);
+      expect(noUserRes.body.errors).toEqual(['Email or Password is incorrect']);
     });
     ```
