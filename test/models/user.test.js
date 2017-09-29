@@ -44,7 +44,7 @@ describe('User', () => {
     expect(users.length).toBe(1);
   });
 
-  xit('can be found by id', async () => {
+  it('can be found by id', async () => {
     const user = await User.create({
       firstName: 'Elowyn',
       lastName: 'Platzer Bartel',

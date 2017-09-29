@@ -5,11 +5,12 @@
 * [x] signup
 * [x] testing for signup fails - user must have unique email
 * [x] login
-* [ ] testing for login fails
+* [x] testing for login fails
 * [x] users index - only users
-* [ ] testing for malformed JWT
+* [x] testing for malformed JWT
 * [ ] users show - only users
 * [ ] users update - only self
+* [ ] update to Node 8xx I guess 🙄
 
 ### [curl docs](./curl.md)
 
@@ -719,5 +720,27 @@ We don't want to allow just anybody to get a list of users. Let's lock this rout
       expect(noUserRes.body.jwt).toBe(undefined);
       expect(noUserRes.body.user).toEqual(undefined);
       expect(noUserRes.body.errors).toEqual(['Email or Password is incorrect']);
+    });
+    ```
+
+#### User find
+1. Add the model test:
+    ```js
+    it('can be found by id', async () => {
+      const user = await User.create({
+        firstName: 'Elowyn',
+        lastName: 'Platzer Bartel',
+        email: 'elowyn@example.com',
+        birthYear: 2015,
+        student: true,
+        password: 'password',
+      });
+
+      const foundUser = await User.find(user.id);
+      expect(foundUser.firstName).toEqual('Elowyn');
+      expect(foundUser.lastName).toEqual('Platzer Bartel');
+      expect(foundUser.email).toEqual('elowyn@example.com');
+      expect(foundUser.birthYear).toEqual(2015);
+      expect(foundUser.student).toEqual(true);
     });
     ```

@@ -54,7 +54,9 @@ describe('Authentication - ', () => {
       .expect(200);
     expect(wrongPasswordRes.body.jwt).toBe(undefined);
     expect(wrongPasswordRes.body.user).toEqual(undefined);
-    expect(wrongPasswordRes.body.errors).toEqual(['Email or Password is incorrect']);
+    expect(wrongPasswordRes.body.errors).toEqual([
+      'Email or Password is incorrect',
+    ]);
 
     const noUserRes = await request(app)
       .post('/login')
