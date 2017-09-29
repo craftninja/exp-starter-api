@@ -9,5 +9,6 @@ router.post('/', usersController.create);
 router.use(verifyLoggedInUser);
 
 router.get('/', usersController.index);
+router.get('/:id', usersController.show);
 
 module.exports = router;

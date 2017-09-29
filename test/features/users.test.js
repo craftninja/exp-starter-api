@@ -36,7 +36,7 @@ describe('Users', () => {
     expect(res.body.user.updatedAt).toEqual(undefined);
   });
 
-  it('can be listed for a logged in user', async () => {
+  it('can be listed for a logged in user only', async () => {
     const user = await User.create({
       firstName: 'Elowyn',
       lastName: 'Platzer Bartel',
@@ -70,5 +70,40 @@ describe('Users', () => {
     expect(newUser.passwordDigest).toEqual(undefined);
     expect(newUser.createdAt).toEqual(undefined);
     expect(newUser.updatedAt).toEqual(undefined);
+  });
+
+  it('can be shown for a logged in user only', async () => {
+    const user = await User.create({
+      firstName: 'Elowyn',
+      lastName: 'Platzer Bartel',
+      email: 'elowyn@example.com',
+      birthYear: 2015,
+      student: true,
+      password: 'password',
+    });
+    serializedUser = await userSerializer(user);
+    token = jwt.sign({ user: serializedUser }, process.env.JWT_SECRET);
+
+    const resNotLoggedIn = await request(app)
+      .get(`/users/${user.id}`)
+      .expect(404);
+
+    const resLoggedIn = await request(app)
+      .get(`/users/${user.id}`)
+      .set('jwt', token)
+      .expect(200);
+
+    const showUser = resLoggedIn.body.user;
+    expect(resLoggedIn.jwt).toBe(undefined);
+    expect(showUser.id).not.toBe(undefined);
+    expect(showUser.firstName).toEqual('Elowyn');
+    expect(showUser.lastName).toEqual('Platzer Bartel');
+    expect(showUser.email).toEqual('elowyn@example.com');
+    expect(showUser.birthYear).toEqual(2015);
+    expect(showUser.student).toEqual(true);
+
+    expect(showUser.passwordDigest).toEqual(undefined);
+    expect(showUser.createdAt).toEqual(undefined);
+    expect(showUser.updatedAt).toEqual(undefined);
   });
 });

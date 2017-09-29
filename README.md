@@ -744,3 +744,54 @@ We don't want to allow just anybody to get a list of users. Let's lock this rout
       expect(foundUser.student).toEqual(true);
     });
     ```
+
+#### User show for a logged in user
+1. Add the feature test:
+    ```js
+    it('can be shown for a logged in user only', async () => {
+      const user = await User.create({
+        firstName: 'Elowyn',
+        lastName: 'Platzer Bartel',
+        email: 'elowyn@example.com',
+        birthYear: 2015,
+        student: true,
+        password: 'password',
+      });
+      serializedUser = await userSerializer(user);
+      token = jwt.sign({ user: serializedUser }, process.env.JWT_SECRET);
+
+      const resNotLoggedIn = await request(app)
+        .get(`/users/${user.id}`)
+        .expect(404);
+
+      const resLoggedIn = await request(app)
+        .get(`/users/${user.id}`)
+        .set('jwt', token)
+        .expect(200);
+
+      const showUser = resLoggedIn.body.user;
+      expect(resLoggedIn.jwt).toBe(undefined);
+      expect(showUser.id).not.toBe(undefined);
+      expect(showUser.firstName).toEqual('Elowyn');
+      expect(showUser.lastName).toEqual('Platzer Bartel');
+      expect(showUser.email).toEqual('elowyn@example.com');
+      expect(showUser.birthYear).toEqual(2015);
+      expect(showUser.student).toEqual(true);
+
+      expect(showUser.passwordDigest).toEqual(undefined);
+      expect(showUser.createdAt).toEqual(undefined);
+      expect(showUser.updatedAt).toEqual(undefined);
+    });
+    ```
+
+1. Add the route and controller action:
+    ```js
+    router.get('/:id', usersController.show);
+    ```
+    ```js
+    exports.show = async (req, res, next) => {
+      const user = await User.find(req.params.id);
+      const serializedUser = await userSerializer(user);
+      res.json({ user: serializedUser });
+    }
+    ```

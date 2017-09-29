@@ -15,3 +15,9 @@ exports.create = async (req, res, next) => {
   const token = jwt.sign({ user: serializedUser }, process.env.JWT_SECRET);
   res.json({ jwt: token, user: serializedUser });
 };
+
+exports.show = async (req, res, next) => {
+  const user = await User.find(req.params.id);
+  const serializedUser = await userSerializer(user);
+  res.json({ user: serializedUser });
+}
