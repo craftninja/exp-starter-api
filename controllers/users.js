@@ -17,7 +17,13 @@ exports.create = async (req, res, next) => {
 };
 
 exports.show = async (req, res, next) => {
-  const user = await User.find(req.params.id);
-  const serializedUser = await userSerializer(user);
-  res.json({ user: serializedUser });
-}
+  try {
+    const user = await User.find(req.params.id);
+    const serializedUser = await userSerializer(user);
+    res.json({ user: serializedUser });
+  } catch (e) {
+    const err = new Error('Not Found');
+    err.status = 404;
+    next(err);
+  }
+};

@@ -72,7 +72,7 @@ describe('Users', () => {
     expect(newUser.updatedAt).toEqual(undefined);
   });
 
-  it('can be shown for a logged in user only', async () => {
+  it('can be shown with a valid user id for a logged in user only', async () => {
     const user = await User.create({
       firstName: 'Elowyn',
       lastName: 'Platzer Bartel',
@@ -86,6 +86,11 @@ describe('Users', () => {
 
     const resNotLoggedIn = await request(app)
       .get(`/users/${user.id}`)
+      .expect(404);
+
+    const resLoggedInWrongId = await request(app)
+      .get(`/users/${user.id + 10}`)
+      .set('jwt', token)
       .expect(404);
 
     const resLoggedIn = await request(app)

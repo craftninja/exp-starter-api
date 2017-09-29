@@ -795,3 +795,26 @@ We don't want to allow just anybody to get a list of users. Let's lock this rout
       res.json({ user: serializedUser });
     }
     ```
+
+#### Update show for "no user found with that id"
+1. Update the test description to "can be shown with a valid user id for a logged in user only" and add the following request between the two requests of the last test:
+    ```js
+    const resLoggedInWrongId = await request(app)
+      .get(`/users/${user.id+10}`)
+      .set('jwt', token)
+      .expect(404);
+    ```
+1. Update users controller show action to:
+    ```js
+    exports.show = async (req, res, next) => {
+      try {
+        const user = await User.find(req.params.id);
+        const serializedUser = await userSerializer(user);
+        res.json({ user: serializedUser });
+      } catch (e) {
+        const err = new Error('Not Found');
+        err.status = 404;
+        next(err);
+      }
+    }
+    ```
