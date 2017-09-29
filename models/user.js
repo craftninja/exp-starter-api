@@ -18,6 +18,7 @@ exports.authenticate = async credentials => {
   const valid = user
     ? await bcrypt.compare(credentials.password, user.passwordDigest)
     : false;
+
   if (valid) {
     const serializedUser = await userSerializer(user);
     const token = jwt.sign({ user: serializedUser }, process.env.JWT_SECRET);

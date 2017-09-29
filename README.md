@@ -3,7 +3,7 @@
 ### todo
 * [x] prettier
 * [x] signup
-* [ ] testing for signup fails - user must have unique email
+* [x] testing for signup fails - user must have unique email
 * [x] login
 * [ ] testing for login fails
 * [x] users index - only users
@@ -102,7 +102,6 @@ Prettier
 1. create a new file `test/models/user.test.js` with the following content:
     ```js
     const expect = require('expect');
-    const request = require('supertest');
 
     const User = require('../../models/user.js')
 
