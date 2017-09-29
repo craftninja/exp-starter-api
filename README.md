@@ -533,9 +533,7 @@ We don't want to allow just anybody to get a list of users. Let's lock this rout
 
     module.exports = (req, res, next) => {
       const token = req.headers.jwt;
-      try {
-        currentUser(token);
-      } catch (e) {
+      if (!currentUser(token)) {
         const err = new Error('Not Found');
         err.status = 404;
         next(err);
@@ -548,7 +546,11 @@ We don't want to allow just anybody to get a list of users. Let's lock this rout
     const jwt = require('jsonwebtoken');
 
     module.exports = token => {
-      return jwt.verify(token, process.env.JWT_SECRET).user;
+      try {
+        return jwt.verify(token, process.env.JWT_SECRET).user;
+      } catch (err) {
+        return undefined
+      }
     };
     ```
 
@@ -646,4 +648,44 @@ We don't want to allow just anybody to get a list of users. Let's lock this rout
       errors.push(error);
     };
     if (errors.length > 0) { return errors };
+    ```
+
+#### Test the current user lib function independently
+1. Add the happy path test, "break it" to see a good red, then allow it to pass.
+    ```js
+    const expect = require('expect');
+    const jwt = require('jsonwebtoken');
+
+    require('../helpers');
+
+    const currentUser = require('../../lib/currentUser');
+    const User = require('../../models/user');
+    const userSerializer = require('../../serializers/user');
+
+    describe('currentUser', () => {
+      it('returns a User when passed a valid token', async () => {
+        const createdUser = await User.create({
+          firstName: 'Elowyn',
+          lastName: 'Platzer Bartel',
+          email: 'elowyn@example.com',
+          birthYear: 2015,
+          student: true,
+          password: 'password',
+        });
+        const serializedUser = userSerializer(createdUser);
+        const validToken = jwt.sign({ user: serializedUser }, process.env.JWT_SECRET);
+
+        const user = currentUser(validToken);
+        expect(user).toEqual(serializedUser); //break it here for example with `.toEqual(createdUser)`
+      });
+    });
+    ```
+1. Add the sad path test...
+    ```js
+    it('returns undefined when passed an invalid token', async () => {
+      const invalidToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9';
+
+      const user = currentUser(invalidToken);
+      expect(user).toEqual(undefined);
+    });
     ```
