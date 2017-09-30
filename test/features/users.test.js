@@ -10,7 +10,7 @@ const User = require('../../models/user');
 const userSerializer = require('../../serializers/user');
 
 describe('Users', () => {
-  it('can signup and receive a JWT', async () => {
+  it('can signup with unique email and receive a JWT', async () => {
     const res = await request(app)
       .post('/users')
       .send({
@@ -34,6 +34,22 @@ describe('Users', () => {
     expect(res.body.user.passwordDigest).toEqual(undefined);
     expect(res.body.user.createdAt).toEqual(undefined);
     expect(res.body.user.updatedAt).toEqual(undefined);
+
+    const duplicateEmailRes = await request(app)
+      .post('/users')
+      .send({
+        firstName: 'Elowyn',
+        lastName: 'Platzer Bartel',
+        email: 'elowyn@example.com',
+        birthYear: 2015,
+        student: true,
+        password: 'password',
+      })
+      .expect(200);
+
+      expect(duplicateEmailRes.body.jwt).toBe(undefined);
+      expect(duplicateEmailRes.body.user.id).toBe(undefined);
+      expect(duplicateEmailRes.body.user.errors).toEqual(['Email already taken']);
   });
 
   it('can be listed for a logged in user only', async () => {

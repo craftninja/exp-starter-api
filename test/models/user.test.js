@@ -39,7 +39,7 @@ describe('User', () => {
       password: 'password',
     });
 
-    expect(duplicateUser).toEqual([new Error('Email already taken')]);
+    expect(duplicateUser).toEqual({ errors: ['Email already taken'] });
     const users = await User.all();
     expect(users.length).toBe(1);
   });

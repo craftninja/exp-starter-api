@@ -637,7 +637,7 @@ We don't want to allow just anybody to get a list of users. Let's lock this rout
         password: 'password',
       });
 
-      expect(duplicateUser).toEqual([new Error('Email already taken')])
+      expect(duplicateUser).toEqual(['Email already taken'])
       const users = await User.all();
       expect(users.length).toBe(1);
     });
@@ -647,7 +647,7 @@ We don't want to allow just anybody to get a list of users. Let's lock this rout
     ```js
     const errors = [];
     if (await this.findBy({email: properties.email})) {
-      const error = new Error('Email already taken')
+      const error = 'Email already taken'
       errors.push(error);
     };
     if (errors.length > 0) { return errors };
@@ -816,5 +816,36 @@ We don't want to allow just anybody to get a list of users. Let's lock this rout
         err.status = 404;
         next(err);
       }
+    }
+    ```
+
+#### Feature test for User tries to login with duplicate email
+1. Add to end of create user feature test:
+    ```js
+    const duplicateEmailRes = await request(app)
+      .post('/users')
+      .send({
+        firstName: 'Elowyn',
+        lastName: 'Platzer Bartel',
+        email: 'elowyn@example.com',
+        birthYear: 2015,
+        student: true,
+        password: 'password',
+      })
+      .expect(200);
+
+      expect(duplicateEmailRes.body.jwt).toBe(undefined);
+      expect(duplicateEmailRes.body.user.id).toBe(undefined);
+      expect(duplicateEmailRes.body.user.errors).toEqual(['Email already taken']);
+    ```
+1. Update the create user action in the controller:
+    ```js
+    const user = await User.create(req.body);
+    if (user.errors) {
+      res.json({ user: user });
+    } else {
+      const serializedUser = await userSerializer(user);
+      const token = jwt.sign({ user: serializedUser }, process.env.JWT_SECRET);
+      res.json({ jwt: token, user: serializedUser });
     }
     ```
