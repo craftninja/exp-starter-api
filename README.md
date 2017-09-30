@@ -8,7 +8,7 @@
 * [x] testing for login fails
 * [x] users index - only users
 * [x] testing for malformed JWT
-* [ ] users show - only users
+* [x] users show - only users
 * [ ] users update - only self
 * [ ] update to Node 8xx I guess 🙄
 

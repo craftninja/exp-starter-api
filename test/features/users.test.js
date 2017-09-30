@@ -47,9 +47,9 @@ describe('Users', () => {
       })
       .expect(200);
 
-      expect(duplicateEmailRes.body.jwt).toBe(undefined);
-      expect(duplicateEmailRes.body.user.id).toBe(undefined);
-      expect(duplicateEmailRes.body.user.errors).toEqual(['Email already taken']);
+    expect(duplicateEmailRes.body.jwt).toBe(undefined);
+    expect(duplicateEmailRes.body.user.id).toBe(undefined);
+    expect(duplicateEmailRes.body.user.errors).toEqual(['Email already taken']);
   });
 
   it('can be listed for a logged in user only', async () => {
