@@ -95,3 +95,30 @@ exports.findBy = async property => {
   const user = (await query(findByQuery, [value])).rows[0];
   return user;
 };
+
+exports.update = async properties => {
+  const saltRounds = 10;
+  const salt = bcrypt.genSaltSync(saltRounds);
+  const passwordDigest = bcrypt.hashSync(properties.password, salt);
+
+  const updatedUser = (await query(
+    `UPDATE "users" SET
+    "firstName"=($1),
+    "lastName"=($2),
+    "email"=($3),
+    "birthYear"=($4),
+    "student"=($5),
+    "passwordDigest"=($6) WHERE id=($7) RETURNING *`,
+    [
+      properties.firstName,
+      properties.lastName,
+      properties.email,
+      properties.birthYear,
+      properties.student,
+      passwordDigest,
+      properties.id,
+    ]
+  )).rows[0];
+
+  return updatedUser;
+};

@@ -11,6 +11,7 @@
 * [x] users show - only users
 * [ ] users update - only self
 * [x] update to Node 8xx I guess 🙄
+* [ ] import statements instead of requires where possible?
 
 ### [curl docs](./curl.md)
 
@@ -848,4 +849,60 @@ We don't want to allow just anybody to get a list of users. Let's lock this rout
       const token = jwt.sign({ user: serializedUser }, process.env.JWT_SECRET);
       res.json({ jwt: token, user: serializedUser });
     }
+    ```
+
+#### Model - User can be updated
+1. model test:
+    ```js
+    it('can be updated', async () => {
+      const originalUser = await User.create({
+        firstName: 'Elowyn',
+        lastName: 'Platzer Bartel',
+        email: 'elowyn@example.com',
+        birthYear: 2015,
+        student: true,
+        password: 'password',
+      });
+      const updatedUser = await User.update({
+        id: originalUser.id,
+        firstName: 'Freyja',
+        lastName: 'Puppy',
+        email: 'freyja@example.com',
+        birthYear: 2016,
+        student: false,
+        password: 'puppy password',
+      })
+
+      expect(updatedUser.firstName).toBe('Freyja');
+      expect(updatedUser.lastName).toBe('Puppy');
+      expect(updatedUser.email).toBe('freyja@example.com');
+      expect(updatedUser.birthYear).toBe(2016);
+      expect(updatedUser.student).toBe(false);
+      expect(updatedUser.passwordDigest).not.toBe(originalUser.passwordDigest);
+    });
+    ```
+1. model method:
+    ```js
+    exports.update = async properties => {
+      const saltRounds = 10;
+      const salt = bcrypt.genSaltSync(saltRounds);
+      const passwordDigest = bcrypt.hashSync(properties.password, salt);
+
+      const updatedUser = (await query(`UPDATE "users" SET
+        "firstName"=($1),
+        "lastName"=($2),
+        "email"=($3),
+        "birthYear"=($4),
+        "student"=($5),
+        "passwordDigest"=($6) WHERE id=($7) RETURNING *`, [
+        properties.firstName,
+        properties.lastName,
+        properties.email,
+        properties.birthYear,
+        properties.student,
+        passwordDigest,
+        properties.id,
+      ])).rows[0];
+
+      return updatedUser;
     ```
