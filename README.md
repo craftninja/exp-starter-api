@@ -10,7 +10,7 @@
 * [x] testing for malformed JWT
 * [x] users show - only users
 * [ ] users update - only self
-* [ ] update to Node 8xx I guess 🙄
+* [x] update to Node 8xx I guess 🙄
 
 ### [curl docs](./curl.md)
 

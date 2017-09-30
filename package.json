@@ -2,6 +2,9 @@
   "name": "exp-starter-api",
   "version": "0.0.0",
   "private": true,
+  "engines": {
+    "node": ">=8.6.0"
+  },
   "scripts": {
     "db:migrate": "node postgrator.js",
     "db:migrate:test": "NODE_ENV=test node postgrator.js",
