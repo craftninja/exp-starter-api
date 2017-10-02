@@ -71,6 +71,38 @@ describe('User', () => {
     expect(updatedUser.passwordDigest).not.toBe(originalUser.passwordDigest);
   });
 
+  it('must have unique email to be updated', async () => {
+    const firstUser = await User.create({
+      firstName: 'Elowyn',
+      lastName: 'Platzer Bartel',
+      email: 'elowyn@example.com',
+      birthYear: 2015,
+      student: true,
+      password: 'password',
+    });
+    const secondUser = await User.create({
+      firstName: 'Freyja',
+      lastName: 'Puppy',
+      email: 'freyja@example.com',
+      birthYear: 2016,
+      student: false,
+      password: 'password',
+    });
+    const updateSecondUser = await User.update({
+      id: secondUser.id,
+      firstName: 'Freyja',
+      lastName: 'Puppy',
+      email: 'elowyn@example.com',
+      birthYear: 2016,
+      student: false,
+      password: 'password',
+    });
+
+    expect(updateSecondUser).toEqual({ errors: ['Email already taken'] });
+    const secondUserRecord = await User.find(secondUser.id);
+    expect(secondUserRecord.email).toEqual('freyja@example.com');
+  });
+
   it('can be found by id', async () => {
     const user = await User.create({
       firstName: 'Elowyn',
