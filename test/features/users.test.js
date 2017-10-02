@@ -137,9 +137,29 @@ describe('Users', () => {
       student: false,
       password: 'password',
     });
-
+    const other = await User.create({
+      firstName: 'Freyja',
+      lastName: 'Platzer Bartel',
+      email: 'freyja@example.com',
+      birthYear: 2016,
+      student: false,
+      password: 'password',
+    });
     serializedSelf = await userSerializer(self);
     selfToken = jwt.sign({ user: serializedSelf }, process.env.JWT_SECRET);
+
+    const resOther = await request(app)
+      .put(`/users/${other.id}`)
+      .set('jwt', selfToken)
+      .send({
+        firstName: 'Elowyn',
+        lastName: 'Platzer Bartel',
+        email: 'elowyn@example.com',
+        birthYear: 2015,
+        student: true,
+        password: 'password',
+      })
+      .expect(404);
 
     const resSelf = await request(app)
       .put(`/users/${self.id}`)
