@@ -1,4 +1,4 @@
-const User = require('../../models/user')
+const User = require('../../models/user');
 
 exports.createUser = async overrides => {
   const defaults = {
@@ -10,5 +10,5 @@ exports.createUser = async overrides => {
     password: 'password',
   };
 
-  return await User.create({ ...defaults, ...overrides })
-}
+  return await User.create({ ...defaults, ...overrides });
+};

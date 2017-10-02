@@ -16,7 +16,8 @@
 * [ ] model test - user cannot update email to a pre-existing email address regardless of spaces on either end of entry
 * [x] migration - email must be unique on db
 * [x] update to Node 8xx I guess 🙄
-* [ ] object creation methods? createUser() or createUser(overrides)
+* [x] object creation methods? createUser() or createUser(overrides)
+* [ ] `createUser()` creates "unique" users each time with Math.rand or whatevs 4 random numbers? at the end of everything
 * [ ] import statements instead of requires where possible?
 
 ### [curl docs](./curl.md)

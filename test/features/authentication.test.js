@@ -10,8 +10,8 @@ const User = require('../../models/user');
 
 describe('Authentication - ', () => {
   it('users that log in receive JWT & their serialized user obj', async () => {
-    const email = 'elowyn@example.com'
-    const password = 'password'
+    const email = 'elowyn@example.com';
+    const password = 'password';
 
     const user = await createUser({ email, password });
     const res = await request(app)
@@ -38,7 +38,7 @@ describe('Authentication - ', () => {
     const email = 'elowyn@example.com';
     const password = 'password';
 
-    const user = await createUser({ email, password});
+    const user = await createUser({ email, password });
     const wrongPasswordRes = await request(app)
       .post('/login')
       .send({ email, password: 'wrong password' })
