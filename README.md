@@ -668,7 +668,7 @@ We don't want to allow just anybody to get a list of users. Let's lock this rout
     const expect = require('expect');
     const jwt = require('jsonwebtoken');
 
-    require('../helpers');
+    require('../helpers/testSetup');
 
     const currentUser = require('../../lib/currentUser');
     const User = require('../../models/user');

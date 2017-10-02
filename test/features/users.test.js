@@ -2,7 +2,7 @@ const expect = require('expect');
 const jwt = require('jsonwebtoken');
 const request = require('supertest');
 
-require('../helpers');
+require('../helpers/testSetup');
 
 const app = require('../../app');
 

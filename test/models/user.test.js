@@ -1,6 +1,6 @@
 const expect = require('expect');
 
-require('../helpers');
+require('../helpers/testSetup');
 
 const User = require('../../models/user.js');
 

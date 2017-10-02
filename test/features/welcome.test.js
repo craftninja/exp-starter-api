@@ -1,7 +1,7 @@
 const expect = require('expect');
 const request = require('supertest');
 
-require('../helpers');
+require('../helpers/testSetup');
 
 const app = require('../../app');
 
