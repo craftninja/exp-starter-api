@@ -180,4 +180,40 @@ describe('Users', () => {
     expect(resSelf.body.user.birthYear).toBe(2015);
     expect(resSelf.body.user.student).toBe(true);
   });
+
+  it('cannot update to pre-existing email address', async () => {
+    const firstUser = await User.create({
+      firstName: 'Elowyn',
+      lastName: 'Platzer-Bartel',
+      email: 'elowyn@example.com',
+      birthYear: 2017,
+      student: false,
+      password: 'password',
+    });
+    const secondUser = await User.create({
+      firstName: 'Elowyn',
+      lastName: 'Other Person',
+      email: 'e@example.com',
+      birthYear: 2000,
+      student: true,
+      password: 'password',
+    });
+    serializedSecondUser = await userSerializer(secondUser);
+    token = jwt.sign({ user: serializedSecondUser }, process.env.JWT_SECRET);
+
+    const res = await request(app)
+      .put(`/users/${secondUser.id}`)
+      .set('jwt', token)
+      .send({
+        firstName: 'Elowyn',
+        lastName: 'Other Person',
+        email: 'elowyn@example.com',
+        birthYear: 2000,
+        student: true,
+        password: 'password',
+      })
+      .expect(200);
+
+    expect(res.body.user).toEqual({ errors: ['Email already taken'] });
+  });
 });

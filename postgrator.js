@@ -5,7 +5,7 @@ if (process.env.NODE_ENV === 'test') {
   process.env.DATABASE_URL = process.env.TEST_DATABASE_URL;
 }
 if (!process.env.MIGRATE_TO) {
-  process.env.MIGRATE_TO = 'max'
+  process.env.MIGRATE_TO = 'max';
 }
 
 const postgrator = require('postgrator');

@@ -12,7 +12,7 @@ exports.index = async (req, res, next) => {
 exports.create = async (req, res, next) => {
   const user = await User.create(req.body);
   if (user.errors) {
-    res.json({ user: user });
+    res.json({ user });
   } else {
     const serializedUser = await userSerializer(user);
     const token = jwt.sign({ user: serializedUser }, process.env.JWT_SECRET);
@@ -38,6 +38,11 @@ exports.update = async (req, res, next) => {
     ...req.body,
     ...{ id: req.params.id },
   });
-  const serializedUser = await userSerializer(updatedUser);
-  res.json({ user: serializedUser });
+
+  if (updatedUser.errors) {
+    res.json({ user: updatedUser });
+  } else {
+    const serializedUser = await userSerializer(updatedUser);
+    res.json({ user: serializedUser });
+  }
 };

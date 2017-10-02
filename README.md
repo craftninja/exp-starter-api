@@ -10,9 +10,13 @@
 * [x] testing for malformed JWT
 * [x] users show - only users
 * [x] users update - only self
+* [x] users update feature test - get validation error
 * [x] model test - user cannot update email to a pre-existing email address
+* [ ] model test - user cannot update email to a pre-existing email address regardless of case
+* [ ] model test - user cannot update email to a pre-existing email address regardless of spaces on either end of entry
 * [x] migration - email must be unique on db
 * [x] update to Node 8xx I guess 🙄
+* [ ] object creation methods? createUser() or createUser(overrides)
 * [ ] import statements instead of requires where possible?
 
 ### [curl docs](./curl.md)
