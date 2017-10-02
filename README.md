@@ -24,6 +24,8 @@
 1. `$ createdb exp_starter_app_development`
 1. `$ yarn db:migrate`
 1. `$ yarn db:migrate:test`
+1. rollback to a specific version:
+    * `$ MIGRATE_TO=<TIMESTAMP OF MIGRATION> yarn db:migrate`
 1. `$ nodemon start`
     * `$ yarn global add nodemon` if you don't have it... this will restart your server on *most* changes
 
@@ -907,4 +909,7 @@ We don't want to allow just anybody to get a list of users. Let's lock this rout
       ])).rows[0];
 
       return updatedUser;
+    }
     ```
+
+#### And so on...

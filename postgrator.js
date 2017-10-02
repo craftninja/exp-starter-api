@@ -4,6 +4,10 @@ if (process.env.NODE_ENV !== 'production') {
 if (process.env.NODE_ENV === 'test') {
   process.env.DATABASE_URL = process.env.TEST_DATABASE_URL;
 }
+if (!process.env.MIGRATE_TO) {
+  process.env.MIGRATE_TO = 'max'
+}
+
 const postgrator = require('postgrator');
 
 postgrator.setConfig({
@@ -13,7 +17,7 @@ postgrator.setConfig({
 });
 
 // migrate to version specified, or supply 'max' to go all the way up
-postgrator.migrate('max', function(err, migrations) {
+postgrator.migrate(process.env.MIGRATE_TO, function(err, migrations) {
   if (err) {
     console.log(err);
   } else {
