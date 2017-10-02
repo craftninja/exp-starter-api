@@ -103,6 +103,29 @@ describe('User', () => {
     expect(secondUserRecord.email).toEqual('freyja@example.com');
   });
 
+  it('can update user using same email address', async () => {
+    const user = await User.create({
+      firstName: 'Elowyn',
+      lastName: 'Platzer Bartel',
+      email: 'elowyn@example.com',
+      birthYear: 2015,
+      student: true,
+      password: 'password',
+    });
+
+    const updatedUser = await User.update({
+      id: user.id,
+      firstName: 'Elowyn',
+      lastName: 'Platzer Bartel',
+      email: 'elowyn@example.com',
+      birthYear: 2015,
+      student: true,
+      password: 'password',
+    });
+
+    expect(updatedUser.email).toEqual(user.email);
+  });
+
   it('can be found by id', async () => {
     const user = await User.create({
       firstName: 'Elowyn',

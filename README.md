@@ -11,7 +11,7 @@
 * [x] users show - only users
 * [x] users update - only self
 * [x] model test - user cannot update email to a pre-existing email address
-* [ ] migration - email must be unique on db
+* [x] migration - email must be unique on db
 * [x] update to Node 8xx I guess 🙄
 * [ ] import statements instead of requires where possible?
 
