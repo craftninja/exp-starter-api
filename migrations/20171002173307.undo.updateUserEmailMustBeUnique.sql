@@ -1,0 +1,2 @@
+ALTER TABLE IF EXISTS "users"
+DROP CONSTRAINT uc_email;

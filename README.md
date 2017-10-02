@@ -9,7 +9,7 @@
 * [x] users index - only users
 * [x] testing for malformed JWT
 * [x] users show - only users
-* [ ] users update - only self
+* [x] users update - only self
 * [x] model test - user cannot update email to a pre-existing email address
 * [ ] migration - email must be unique on db
 * [x] update to Node 8xx I guess 🙄
