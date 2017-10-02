@@ -11,7 +11,7 @@ exports.all = async () => {
 };
 
 exports.authenticate = async credentials => {
-  const user = (await query('SELECT * FROM "users" WHERE "email" = ($1)', [
+  const user = (await query('SELECT * FROM "users" WHERE "email" = $1', [
     credentials.email,
   ])).rows[0];
 
@@ -112,12 +112,12 @@ exports.update = async properties => {
 
   const updatedUser = (await query(
     `UPDATE "users" SET
-    "firstName"=($1),
-    "lastName"=($2),
-    "email"=($3),
-    "birthYear"=($4),
-    "student"=($5),
-    "passwordDigest"=($6) WHERE id=($7) RETURNING *`,
+    "firstName"=$1,
+    "lastName"=$2,
+    "email"=$3,
+    "birthYear"=$4,
+    "student"=$5,
+    "passwordDigest"=$6 WHERE id=$7 RETURNING *`,
     [
       properties.firstName,
       properties.lastName,

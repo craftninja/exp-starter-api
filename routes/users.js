@@ -10,5 +10,6 @@ router.use(verifyLoggedInUser);
 
 router.get('/', usersController.index);
 router.get('/:id', usersController.show);
+router.put('/:id', usersController.update);
 
 module.exports = router;

@@ -10,7 +10,7 @@
 * [x] testing for malformed JWT
 * [x] users show - only users
 * [ ] users update - only self
-* [ ] model test - user cannot update email to a pre-existing email address
+* [x] model test - user cannot update email to a pre-existing email address
 * [ ] migration - email must be unique on db
 * [x] update to Node 8xx I guess 🙄
 * [ ] import statements instead of requires where possible?

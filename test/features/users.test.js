@@ -127,4 +127,37 @@ describe('Users', () => {
     expect(showUser.createdAt).toEqual(undefined);
     expect(showUser.updatedAt).toEqual(undefined);
   });
+
+  it('can update self only', async () => {
+    const self = await User.create({
+      firstName: 'Elowyyn',
+      lastName: 'Platzer-Bartel',
+      email: 'elowyyn@example.com',
+      birthYear: 2017,
+      student: false,
+      password: 'password',
+    });
+
+    serializedSelf = await userSerializer(self);
+    selfToken = jwt.sign({ user: serializedSelf }, process.env.JWT_SECRET);
+
+    const resSelf = await request(app)
+      .put(`/users/${self.id}`)
+      .set('jwt', selfToken)
+      .send({
+        firstName: 'Elowyn',
+        lastName: 'Platzer Bartel',
+        email: 'elowyn@example.com',
+        birthYear: 2015,
+        student: true,
+        password: 'password',
+      })
+      .expect(200);
+
+    expect(resSelf.body.user.firstName).toBe('Elowyn');
+    expect(resSelf.body.user.lastName).toBe('Platzer Bartel');
+    expect(resSelf.body.user.email).toBe('elowyn@example.com');
+    expect(resSelf.body.user.birthYear).toBe(2015);
+    expect(resSelf.body.user.student).toBe(true);
+  });
 });
