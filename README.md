@@ -25,6 +25,7 @@
 ### set it up
 
 1. `$ yarn install`
+1. `$ cp .env.example .env`
 1. `$ createdb exp_starter_app_test`
 1. `$ createdb exp_starter_app_development`
 1. `$ yarn db:migrate`
