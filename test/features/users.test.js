@@ -6,6 +6,7 @@ require('../helpers/testSetup');
 
 const app = require('../../app');
 
+const createUser = require('../helpers/objectCreationMethods').createUser;
 const User = require('../../models/user');
 const userSerializer = require('../../serializers/user');
 
@@ -53,14 +54,7 @@ describe('Users', () => {
   });
 
   it('can be listed for a logged in user only', async () => {
-    const user = await User.create({
-      firstName: 'Elowyn',
-      lastName: 'Platzer Bartel',
-      email: 'elowyn@example.com',
-      birthYear: 2015,
-      student: true,
-      password: 'password',
-    });
+    const user = await createUser();
     serializedUser = await userSerializer(user);
     token = jwt.sign({ user: serializedUser }, process.env.JWT_SECRET);
 
@@ -77,10 +71,11 @@ describe('Users', () => {
     const newUser = resLoggedIn.body.users[0];
     expect(resLoggedIn.jwt).toBe(undefined);
     expect(newUser.id).not.toBe(undefined);
-    expect(newUser.firstName).toEqual('Elowyn');
-    expect(newUser.lastName).toEqual('Platzer Bartel');
-    expect(newUser.email).toEqual('elowyn@example.com');
-    expect(newUser.birthYear).toEqual(2015);
+    expect(newUser.firstName).toMatch(/\w+(?:\d)/);
+    expect(newUser.lastName).toMatch(/\w+(?:\d)/);
+    expect(newUser.email).toMatch(/\w+(?:\d)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
+    expect(newUser.birthYear).toBeGreaterThanOrEqual(1900);
+    expect(newUser.birthYear).toBeLessThanOrEqual(new Date().getFullYear());
     expect(newUser.student).toEqual(true);
 
     expect(newUser.passwordDigest).toEqual(undefined);
@@ -89,14 +84,7 @@ describe('Users', () => {
   });
 
   it('can be shown with a valid user id for a logged in user only', async () => {
-    const user = await User.create({
-      firstName: 'Elowyn',
-      lastName: 'Platzer Bartel',
-      email: 'elowyn@example.com',
-      birthYear: 2015,
-      student: true,
-      password: 'password',
-    });
+    const user = await createUser();
     serializedUser = await userSerializer(user);
     token = jwt.sign({ user: serializedUser }, process.env.JWT_SECRET);
 
@@ -117,10 +105,11 @@ describe('Users', () => {
     const showUser = resLoggedIn.body.user;
     expect(resLoggedIn.jwt).toBe(undefined);
     expect(showUser.id).not.toBe(undefined);
-    expect(showUser.firstName).toEqual('Elowyn');
-    expect(showUser.lastName).toEqual('Platzer Bartel');
-    expect(showUser.email).toEqual('elowyn@example.com');
-    expect(showUser.birthYear).toEqual(2015);
+    expect(showUser.firstName).toMatch(/\w+(?:\d)/);
+    expect(showUser.lastName).toMatch(/\w+(?:\d)/);
+    expect(showUser.email).toMatch(/\w+(?:\d)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
+    expect(showUser.birthYear).toBeGreaterThanOrEqual(1900);
+    expect(showUser.birthYear).toBeLessThanOrEqual(new Date().getFullYear());
     expect(showUser.student).toEqual(true);
 
     expect(showUser.passwordDigest).toEqual(undefined);
@@ -129,22 +118,8 @@ describe('Users', () => {
   });
 
   it('can update self only', async () => {
-    const self = await User.create({
-      firstName: 'Elowyyn',
-      lastName: 'Platzer-Bartel',
-      email: 'elowyyn@example.com',
-      birthYear: 2017,
-      student: false,
-      password: 'password',
-    });
-    const other = await User.create({
-      firstName: 'Freyja',
-      lastName: 'Platzer Bartel',
-      email: 'freyja@example.com',
-      birthYear: 2016,
-      student: false,
-      password: 'password',
-    });
+    const self = await createUser();
+    const other = await createUser();
     serializedSelf = await userSerializer(self);
     selfToken = jwt.sign({ user: serializedSelf }, process.env.JWT_SECRET);
 
@@ -190,14 +165,7 @@ describe('Users', () => {
       student: false,
       password: 'password',
     });
-    const secondUser = await User.create({
-      firstName: 'Elowyn',
-      lastName: 'Other Person',
-      email: 'e@example.com',
-      birthYear: 2000,
-      student: true,
-      password: 'password',
-    });
+    const secondUser = await createUser();
     serializedSecondUser = await userSerializer(secondUser);
     token = jwt.sign({ user: serializedSecondUser }, process.env.JWT_SECRET);
 
@@ -207,7 +175,7 @@ describe('Users', () => {
       .send({
         firstName: 'Elowyn',
         lastName: 'Other Person',
-        email: 'elowyn@example.com',
+        email: `${firstUser.email}`,
         birthYear: 2000,
         student: true,
         password: 'password',
