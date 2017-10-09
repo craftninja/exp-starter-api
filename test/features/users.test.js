@@ -174,7 +174,7 @@ describe('Users', () => {
       .send({
         firstName: 'Elowyn',
         lastName: 'Other Person',
-        email: `${firstUser.email}`,
+        email: firstUser.email,
         birthYear: 2000,
         student: true,
         password: 'password',
