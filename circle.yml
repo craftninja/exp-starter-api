@@ -1,0 +1,12 @@
+machine:
+  node:
+    version: 8.6.0
+  environment:
+    JWT_SECRET: SuPeRsEcReTy
+    TEST_DATABASE_URL: postgres://localhost/exp_starter_app_test
+  services:
+    - postgresql
+database:
+  override:
+    - createdb exp_starter_app_test
+    - yarn db:migrate:test

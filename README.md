@@ -1,3 +1,7 @@
+[![Code Climate](https://codeclimate.com/github/craftninja/exp-starter-api/badges/gpa.svg)](https://codeclimate.com/github/craftninja/exp-starter-api)
+[![Test Coverage](https://codeclimate.com/github/craftninja/exp-starter-api/badges/coverage.svg)](https://codeclimate.com/github/craftninja/exp-starter-api/coverage)
+[![Issue Count](https://codeclimate.com/github/craftninja/exp-starter-api/badges/issue_count.svg)](https://codeclimate.com/github/craftninja/exp-starter-api)
+
 # README
 
 ### todo
@@ -17,7 +21,7 @@
 * [x] migration - email must be unique on db
 * [x] update to Node 8xx I guess 🙄
 * [x] object creation methods? createUser() or createUser(overrides)
-* [ ] `createUser()` creates "unique" users each time with Math.rand or whatevs 4 random numbers? at the end of everything
+* [x] `createUser()` creates "unique" users each time with Math.rand or whatevs 4 random numbers? at the end of everything
 * [ ] import statements instead of requires where possible?
 
 ### [curl docs](./curl.md)
