@@ -71,11 +71,14 @@ describe('Users', () => {
     const newUser = resLoggedIn.body.users[0];
     expect(resLoggedIn.jwt).toBe(undefined);
     expect(newUser.id).not.toBe(undefined);
-    expect(newUser.firstName).toMatch(/\w+(?:\d)/);
-    expect(newUser.lastName).toMatch(/\w+(?:\d)/);
-    expect(newUser.email).toMatch(/\w+(?:\d)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
-    expect(newUser.birthYear).toBeGreaterThanOrEqual(1900);
-    expect(newUser.birthYear).toBeLessThanOrEqual(new Date().getFullYear());
+    expect(newUser).toEqual({
+      id: user.id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      birthYear: user.birthYear,
+      student: user.student
+    });
     expect(newUser.student).toEqual(true);
 
     expect(newUser.passwordDigest).toEqual(undefined);
@@ -105,11 +108,14 @@ describe('Users', () => {
     const showUser = resLoggedIn.body.user;
     expect(resLoggedIn.jwt).toBe(undefined);
     expect(showUser.id).not.toBe(undefined);
-    expect(showUser.firstName).toMatch(/\w+(?:\d)/);
-    expect(showUser.lastName).toMatch(/\w+(?:\d)/);
-    expect(showUser.email).toMatch(/\w+(?:\d)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
-    expect(showUser.birthYear).toBeGreaterThanOrEqual(1900);
-    expect(showUser.birthYear).toBeLessThanOrEqual(new Date().getFullYear());
+    expect(showUser).toEqual({
+      id: showUser.id,
+      firstName: showUser.firstName,
+      lastName: showUser.lastName,
+      email: showUser.email,
+      birthYear: showUser.birthYear,
+      student: showUser.student
+    });
     expect(showUser.student).toEqual(true);
 
     expect(showUser.passwordDigest).toEqual(undefined);
@@ -157,14 +163,7 @@ describe('Users', () => {
   });
 
   it('cannot update to pre-existing email address', async () => {
-    const firstUser = await User.create({
-      firstName: 'Elowyn',
-      lastName: 'Platzer-Bartel',
-      email: 'elowyn@example.com',
-      birthYear: 2017,
-      student: false,
-      password: 'password',
-    });
+    const firstUser = await createUser();
     const secondUser = await createUser();
     serializedSecondUser = await userSerializer(secondUser);
     token = jwt.sign({ user: serializedSecondUser }, process.env.JWT_SECRET);
