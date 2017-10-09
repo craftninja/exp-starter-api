@@ -13,12 +13,12 @@ const randomYear = () => {
 };
 
 exports.createUser = async overrides => {
-  const randomId = randomDigits();
+  const randomNumber = randomDigits();
 
   const defaults = {
-    firstName: `Elowyn${randomId}`,
-    lastName: `Platzer Bartel${randomId}`,
-    email: `elowyn${randomId}@example.com`,
+    firstName: `Elowyn${randomNumber}`,
+    lastName: `Platzer Bartel${randomNumber}`,
+    email: `elowyn${randomNumber}@example.com`,
     birthYear: randomYear(),
     student: true,
     password: 'password',
