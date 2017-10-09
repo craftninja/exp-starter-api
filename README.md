@@ -1,6 +1,8 @@
+[![CircleCI](https://circleci.com/gh/craftninja/exp-starter-api.svg?style=shield)](https://circleci.com/gh/craftninja/exp-starter-api)
 [![Code Climate](https://codeclimate.com/github/craftninja/exp-starter-api/badges/gpa.svg)](https://codeclimate.com/github/craftninja/exp-starter-api)
 [![Test Coverage](https://codeclimate.com/github/craftninja/exp-starter-api/badges/coverage.svg)](https://codeclimate.com/github/craftninja/exp-starter-api/coverage)
 [![Issue Count](https://codeclimate.com/github/craftninja/exp-starter-api/badges/issue_count.svg)](https://codeclimate.com/github/craftninja/exp-starter-api)
+
 
 # README
 
@@ -39,9 +41,13 @@
 1. `$ nodemon start`
     * `$ yarn global add nodemon` if you don't have it... this will restart your server on *most* changes
 
-### tests and prettier
+### tests, test coverage & reports, and prettier
 Tests
 * `$ yarn test`
+
+Test coverage and reports
+* `$ yarn coverage` - runs tests and reports coverage
+* `$ yarn reports` - generates coverage artifacts
 
 Prettier
 1. Finish work, **stage all changes**
