@@ -25,6 +25,7 @@
 * [x] object creation methods? createUser() or createUser(overrides)
 * [x] `createUser()` creates "unique" users each time with Math.rand or whatevs 4 random numbers? at the end of everything
 * [ ] import statements instead of requires where possible?
+* [ ] model test - findBy other than email (everything on user)
 
 ### [curl docs](./curl.md)
 

@@ -132,3 +132,8 @@ exports.update = async properties => {
 
   return updatedUser;
 };
+
+// const value = key === 'email' ? property[key].lowercase : property[key];
+// validateEmail() {
+//
+// }
