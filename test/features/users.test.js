@@ -77,7 +77,7 @@ describe('Users', () => {
       lastName: user.lastName,
       email: user.email,
       birthYear: user.birthYear,
-      student: user.student
+      student: user.student,
     });
     expect(newUser.student).toEqual(true);
 
@@ -114,7 +114,7 @@ describe('Users', () => {
       lastName: showUser.lastName,
       email: showUser.email,
       birthYear: showUser.birthYear,
-      student: showUser.student
+      student: showUser.student,
     });
     expect(showUser.student).toEqual(true);
 

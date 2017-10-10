@@ -18,7 +18,10 @@ describe('currentUser', () => {
       password: 'password',
     });
     const serializedUser = userSerializer(createdUser);
-    const validToken = jwt.sign({ user: serializedUser }, process.env.JWT_SECRET);
+    const validToken = jwt.sign(
+      { user: serializedUser },
+      process.env.JWT_SECRET
+    );
 
     const user = currentUser(validToken);
     expect(user).toEqual(serializedUser);
