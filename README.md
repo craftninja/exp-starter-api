@@ -6,6 +6,22 @@
 
 # README
 
+### steeeel it
+* clone it
+* reset your origin url to a new GH url that you own
+* add the repo on your code climate and circle CI account
+* change the urls of all the above badges to reflect your repositories
+* push up the repo and watch for circle and code climate to update
+* do your thing
+
+### contribute to it
+* fork, clone, setup locally following the 'set it up' instructions
+* add remote "upstream" with this repo's ssh url
+* checkout a branch and commit your work
+* push branch to your repo
+* submit pr
+* periodically pull upstream master into master, and rebase the branch on top, force pushing the rebased branch when necessary
+
 ### todo
 * [x] prettier
 * [x] signup
@@ -26,6 +42,10 @@
 * [x] `createUser()` creates "unique" users each time with Math.rand or whatevs 4 random numbers? at the end of everything
 * [ ] import statements instead of requires where possible?
 * [x] model test - findBy other than email (everything on user)
+* [x] add circle, code climate
+* [ ] make code climate happy with trailing commas, eslint or something
+* [ ] prettier runs with test, throws and describes issue found
+* [ ] PR template
 
 ### [curl docs](./curl.md)
 
