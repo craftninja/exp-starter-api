@@ -92,7 +92,7 @@ describe('User', () => {
       id: secondUser.id,
       firstName: 'Freyja',
       lastName: 'Puppy',
-      email: 'elowyn@example.com',
+      email: firstUser.email,
       birthYear: 2016,
       student: false,
       password: 'password',
@@ -145,7 +145,7 @@ describe('User', () => {
   });
 
   it('can be found by property', async () => {
-    const user = await User.create({
+    await User.create({
       firstName: 'Elowyn',
       lastName: 'Platzer Bartel',
       email: 'elowyn@example.com',

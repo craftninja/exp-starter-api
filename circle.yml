@@ -22,4 +22,4 @@ test:
   pre:
     - ./cc-test-reporter before-build
   override:
-    - yarn coverage; yarn report; ./cc-test-reporter after-build -t lcov --exit-code $?
+    - yarn lint; yarn coverage; yarn report; ./cc-test-reporter after-build -t lcov --exit-code $?

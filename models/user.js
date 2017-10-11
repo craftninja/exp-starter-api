@@ -42,9 +42,9 @@ exports.create = async properties => {
   const salt = bcrypt.genSaltSync(saltRounds);
   const passwordDigest = bcrypt.hashSync(properties.password, salt);
 
-  formatEmail = (email) => {
+  const formatEmail = (email) => {
     return email.trim().toLowerCase();
-  }
+  };
 
   const createdUser = (await query(
     `INSERT INTO "users"(
@@ -78,21 +78,21 @@ exports.findBy = async property => {
   const key = Object.keys(property)[0];
   let findByQuery;
   switch (key) {
-    case 'firstName':
-      findByQuery = 'SELECT * FROM "users" WHERE "firstName" = $1 LIMIT 1';
-      break;
-    case 'lastName':
-      findByQuery = 'SELECT * FROM "users" WHERE "lastName" = $1 LIMIT 1';
-      break;
-    case 'email':
-      findByQuery = 'SELECT * FROM "users" WHERE "email" = $1 LIMIT 1';
-      break;
-    case 'birthYear':
-      findByQuery = 'SELECT * FROM "users" WHERE "birthYear" = $1 LIMIT 1';
-      break;
-    case 'student':
-      findByQuery = 'SELECT * FROM "users" WHERE "student" = $1 LIMIT 1';
-      break;
+  case 'firstName':
+    findByQuery = 'SELECT * FROM "users" WHERE "firstName" = $1 LIMIT 1';
+    break;
+  case 'lastName':
+    findByQuery = 'SELECT * FROM "users" WHERE "lastName" = $1 LIMIT 1';
+    break;
+  case 'email':
+    findByQuery = 'SELECT * FROM "users" WHERE "email" = $1 LIMIT 1';
+    break;
+  case 'birthYear':
+    findByQuery = 'SELECT * FROM "users" WHERE "birthYear" = $1 LIMIT 1';
+    break;
+  case 'student':
+    findByQuery = 'SELECT * FROM "users" WHERE "student" = $1 LIMIT 1';
+    break;
   }
 
   const value = property[key];

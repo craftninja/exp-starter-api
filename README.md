@@ -43,9 +43,9 @@
 * [ ] import statements instead of requires where possible?
 * [x] model test - findBy other than email (everything on user)
 * [x] add circle, code climate
-* [ ] make code climate happy with trailing commas, eslint or something
-* [ ] prettier runs with test, throws and describes issue found
-* [ ] PR template
+* [x] make code climate happy with trailing commas, eslint or something
+* [x] ~~prettier~~ linter runs with test, throws and describes issue found
+* [x] PR template
 
 ### [curl docs](./curl.md)
 
@@ -62,22 +62,22 @@
 1. `$ nodemon start`
     * `$ yarn global add nodemon` if you don't have it... this will restart your server on *most* changes
 
-### tests, test coverage & reports, and prettier
-Tests
+### Tests, test coverage & reports, and linter
+Tests (also runs linter on success)
 * `$ yarn test`
 
 Test coverage and reports
 * `$ yarn coverage` - runs tests and reports coverage
 * `$ yarn reports` - generates coverage artifacts
 
-Prettier
-1. Finish work, **stage all changes**
-1. `$ yarn prettier` will change files but **not stage those changes**
-1. `$ git add -p` and approve each change you like (y - yes, n - no, s - split the diff, q - quit)
-1. Rerun tests, then commit all approved diffs
-1. `$ git checkout -- .` to discard unapproved diffs
+Linter alone
+1. `$ yarn lint`
+
+---
 
 ### how did this get made?
+This outlines a large portion of basic beginning setup, but is no longer being extended.
+Subject to deletion.
 
 #### Create basic app
 1. `$ express exp-starter-app` and cd into the created directory
