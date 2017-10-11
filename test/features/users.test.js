@@ -7,7 +7,6 @@ require('../helpers/testSetup');
 const app = require('../../app');
 
 const createUser = require('../helpers/objectCreationMethods').createUser;
-const User = require('../../models/user');
 const userSerializer = require('../../serializers/user');
 
 describe('Users', () => {
@@ -55,12 +54,14 @@ describe('Users', () => {
 
   it('can be listed for a logged in user only', async () => {
     const user = await createUser();
-    serializedUser = await userSerializer(user);
-    token = jwt.sign({ user: serializedUser }, process.env.JWT_SECRET);
+    const serializedUser = await userSerializer(user);
+    const token = jwt.sign({ user: serializedUser }, process.env.JWT_SECRET);
 
     const resNotLoggedIn = await request(app)
       .get('/users')
       .expect(404);
+
+    expect(resNotLoggedIn.body).toEqual({ message: 'Not Found', error: { status: 404 } });
 
     const resLoggedIn = await request(app)
       .get('/users')
@@ -77,7 +78,7 @@ describe('Users', () => {
       lastName: user.lastName,
       email: user.email,
       birthYear: user.birthYear,
-      student: user.student
+      student: user.student,
     });
     expect(newUser.student).toEqual(true);
 
@@ -88,17 +89,21 @@ describe('Users', () => {
 
   it('can be shown with a valid user id for a logged in user only', async () => {
     const user = await createUser();
-    serializedUser = await userSerializer(user);
-    token = jwt.sign({ user: serializedUser }, process.env.JWT_SECRET);
+    const serializedUser = await userSerializer(user);
+    const token = jwt.sign({ user: serializedUser }, process.env.JWT_SECRET);
 
     const resNotLoggedIn = await request(app)
       .get(`/users/${user.id}`)
       .expect(404);
 
+    expect(resNotLoggedIn.body).toEqual({ message: 'Not Found', error: { status: 404 } });
+
     const resLoggedInWrongId = await request(app)
       .get(`/users/${user.id + 10}`)
       .set('jwt', token)
       .expect(404);
+
+    expect(resLoggedInWrongId.body).toEqual({ message: 'Not Found', error: { status: 404 } });
 
     const resLoggedIn = await request(app)
       .get(`/users/${user.id}`)
@@ -114,7 +119,7 @@ describe('Users', () => {
       lastName: showUser.lastName,
       email: showUser.email,
       birthYear: showUser.birthYear,
-      student: showUser.student
+      student: showUser.student,
     });
     expect(showUser.student).toEqual(true);
 
@@ -126,8 +131,8 @@ describe('Users', () => {
   it('can update self only', async () => {
     const self = await createUser();
     const other = await createUser();
-    serializedSelf = await userSerializer(self);
-    selfToken = jwt.sign({ user: serializedSelf }, process.env.JWT_SECRET);
+    const serializedSelf = await userSerializer(self);
+    const selfToken = jwt.sign({ user: serializedSelf }, process.env.JWT_SECRET);
 
     const resOther = await request(app)
       .put(`/users/${other.id}`)
@@ -141,6 +146,8 @@ describe('Users', () => {
         password: 'password',
       })
       .expect(404);
+
+    expect(resOther.body).toEqual({ message: 'Not Found', error: { status: 404 } });
 
     const resSelf = await request(app)
       .put(`/users/${self.id}`)
@@ -165,8 +172,8 @@ describe('Users', () => {
   it('cannot update to pre-existing email address', async () => {
     const firstUser = await createUser();
     const secondUser = await createUser();
-    serializedSecondUser = await userSerializer(secondUser);
-    token = jwt.sign({ user: serializedSecondUser }, process.env.JWT_SECRET);
+    const serializedSecondUser = await userSerializer(secondUser);
+    const token = jwt.sign({ user: serializedSecondUser }, process.env.JWT_SECRET);
 
     const res = await request(app)
       .put(`/users/${secondUser.id}`)
@@ -186,6 +193,8 @@ describe('Users', () => {
 
   it('should trim email whitespaces and down case the email', async () => {
     const user = await createUser({ email: '  ElowYn@example.com '});
+    const serializedUser = await userSerializer(user);
+    const token = jwt.sign({ user: serializedUser }, process.env.JWT_SECRET);
 
     const resLoggedIn = await request(app)
       .get('/users')

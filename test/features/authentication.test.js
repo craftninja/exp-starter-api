@@ -6,7 +6,6 @@ require('../helpers/testSetup');
 const app = require('../../app');
 
 const createUser = require('../helpers/objectCreationMethods').createUser;
-const User = require('../../models/user');
 
 describe('Authentication - ', () => {
   it('users that log in receive JWT & their serialized user obj', async () => {
@@ -38,7 +37,7 @@ describe('Authentication - ', () => {
     const email = 'elowyn@example.com';
     const password = 'password';
 
-    const user = await createUser({ email, password });
+    await createUser({ email, password });
     const wrongPasswordRes = await request(app)
       .post('/login')
       .send({ email, password: 'wrong password' })

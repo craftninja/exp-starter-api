@@ -9,10 +9,10 @@
     "coverage": "nyc mocha --recursive",
     "db:migrate": "node postgrator.js",
     "db:migrate:test": "NODE_ENV=test node postgrator.js",
-    "prettier": "prettier --single-quote --trailing-comma=es5 --list-different --write es5 './**/*.js'",
+    "lint": "eslint --ignore-path .gitignore .",
     "report": "nyc report --reporter=lcov",
     "start": "node ./bin/www",
-    "test": "mocha --recursive"
+    "test": "mocha --recursive && (yarn lint || npm lint)"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -27,10 +27,10 @@
   },
   "devDependencies": {
     "dotenv": "^4.0.0",
+    "eslint": "^4.8.0",
     "expect": "^21.1.0",
     "mocha": "^3.5.3",
     "nyc": "^11.2.1",
-    "prettier": "^1.7.1",
     "supertest": "^3.0.0"
   }
 }
