@@ -42,6 +42,10 @@ exports.create = async properties => {
   const salt = bcrypt.genSaltSync(saltRounds);
   const passwordDigest = bcrypt.hashSync(properties.password, salt);
 
+  formatEmail = (email) => {
+    return email.trim().toLowerCase();
+  }
+
   const createdUser = (await query(
     `INSERT INTO "users"(
       "firstName",
@@ -54,7 +58,7 @@ exports.create = async properties => {
     [
       properties.firstName,
       properties.lastName,
-      properties.email,
+      formatEmail(properties.email),
       properties.birthYear,
       properties.student,
       passwordDigest,
@@ -132,8 +136,3 @@ exports.update = async properties => {
 
   return updatedUser;
 };
-
-// const value = key === 'email' ? property[key].lowercase : property[key];
-// validateEmail() {
-//
-// }
