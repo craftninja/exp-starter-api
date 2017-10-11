@@ -13,4 +13,4 @@
         schema:
           $ref: '#/definitions/testOutput'
       500:
-        $ref: '#/responses/error500'
+        $ref: '#/responses/error'
