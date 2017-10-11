@@ -1,0 +1,16 @@
+/test:
+  get:
+    tags:
+    - test
+    summary: Test endpoint
+    description: Hello world type thing
+    operationId: getTest
+    parameters:
+    - $ref: '#/parameters/testParameter'
+    responses:
+      200:
+        description: Success
+        schema:
+          $ref: '#/definitions/testOutput'
+      500:
+        $ref: '#/responses/error500'

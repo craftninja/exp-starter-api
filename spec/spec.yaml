@@ -1,0 +1,21 @@
+swagger: 2.0
+info:
+  title: exp-starter-api
+  version: 0.0.0
+
+tags:
+- name: test
+  description: Putting tags on your paths objects will organize them in the Swagger UI!
+
+paths:
+  $ref: '#/paths'
+
+parameters:
+  $ref: '#/parameters'
+
+definitions:
+  $ref: '#/definitions'
+
+responses:
+  $ref: '#/responses'
+

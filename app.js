@@ -1,4 +1,5 @@
 const express = require('express');
+const initializeSwagger = require('swagger-tools').initializeMiddleware;
 const path = require('path');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');

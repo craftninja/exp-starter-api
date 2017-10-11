@@ -1,0 +1,12 @@
+error:
+  type: object
+  properties:
+    statusCode:
+      type: string
+    message:
+      type: string
+
+error500:
+  description: Application error
+  allOf:
+  - $ref: '#/responses/error'

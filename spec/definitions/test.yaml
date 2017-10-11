@@ -1,0 +1,6 @@
+testOutput:
+  type: object
+  properties:
+    value:
+      type: string
+      example: Hi
