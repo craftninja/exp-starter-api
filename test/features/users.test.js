@@ -183,4 +183,17 @@ describe('Users', () => {
 
     expect(res.body.user).toEqual({ errors: ['Email already taken'] });
   });
+
+  it('should trim email whitespaces and down case the email', async () => {
+    const user = await createUser({ email: '  ElowYn@example.com '});
+
+    const resLoggedIn = await request(app)
+      .get('/users')
+      .set('jwt', token)
+      .expect(200);
+
+    expect(resLoggedIn.body.users.length).toEqual(1);
+    const newUser = resLoggedIn.body.users[0];
+    expect(newUser.email).toEqual('elowyn@example.com');
+  });
 });

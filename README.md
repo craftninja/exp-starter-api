@@ -18,13 +18,14 @@
 * [x] users update - only self
 * [x] users update feature test - get validation error
 * [x] model test - user cannot update email to a pre-existing email address
-* [ ] model test - user cannot update email to a pre-existing email address regardless of case
-* [ ] model test - user cannot update email to a pre-existing email address regardless of spaces on either end of entry
+* [x] model test - user cannot update email to a pre-existing email address regardless of case
+* [x] model test - user cannot update email to a pre-existing email address regardless of spaces on either end of entry
 * [x] migration - email must be unique on db
 * [x] update to Node 8xx I guess 🙄
 * [x] object creation methods? createUser() or createUser(overrides)
 * [x] `createUser()` creates "unique" users each time with Math.rand or whatevs 4 random numbers? at the end of everything
 * [ ] import statements instead of requires where possible?
+* [x] model test - findBy other than email (everything on user)
 
 ### [curl docs](./curl.md)
 
