@@ -1,4 +1,26 @@
+[![CircleCI](https://circleci.com/gh/craftninja/exp-starter-api.svg?style=shield)](https://circleci.com/gh/craftninja/exp-starter-api)
+[![Code Climate](https://codeclimate.com/github/craftninja/exp-starter-api/badges/gpa.svg)](https://codeclimate.com/github/craftninja/exp-starter-api)
+[![Test Coverage](https://codeclimate.com/github/craftninja/exp-starter-api/badges/coverage.svg)](https://codeclimate.com/github/craftninja/exp-starter-api/coverage)
+[![Issue Count](https://codeclimate.com/github/craftninja/exp-starter-api/badges/issue_count.svg)](https://codeclimate.com/github/craftninja/exp-starter-api)
+
+
 # README
+
+### steeeel it
+* clone it
+* reset your origin url to a new GH url that you own
+* add the repo on your code climate and circle CI account
+* change the urls of all the above badges to reflect your repositories
+* push up the repo and watch for circle and code climate to update
+* do your thing
+
+### contribute to it
+* fork, clone, setup locally following the 'set it up' instructions
+* add remote "upstream" with this repo's ssh url
+* checkout a branch and commit your work
+* push branch to your repo
+* submit pr
+* periodically pull upstream master into master, and rebase the branch on top, force pushing the rebased branch when necessary
 
 ### todo
 * [x] prettier
@@ -12,13 +34,18 @@
 * [x] users update - only self
 * [x] users update feature test - get validation error
 * [x] model test - user cannot update email to a pre-existing email address
-* [ ] model test - user cannot update email to a pre-existing email address regardless of case
-* [ ] model test - user cannot update email to a pre-existing email address regardless of spaces on either end of entry
+* [x] model test - user cannot update email to a pre-existing email address regardless of case
+* [x] model test - user cannot update email to a pre-existing email address regardless of spaces on either end of entry
 * [x] migration - email must be unique on db
 * [x] update to Node 8xx I guess 🙄
 * [x] object creation methods? createUser() or createUser(overrides)
-* [ ] `createUser()` creates "unique" users each time with Math.rand or whatevs 4 random numbers? at the end of everything
+* [x] `createUser()` creates "unique" users each time with Math.rand or whatevs 4 random numbers? at the end of everything
 * [ ] import statements instead of requires where possible?
+* [x] model test - findBy other than email (everything on user)
+* [x] add circle, code climate
+* [x] make code climate happy with trailing commas, eslint or something
+* [x] ~~prettier~~ linter runs with test, throws and describes issue found
+* [x] PR template
 
 ### [curl docs](./curl.md)
 
@@ -35,18 +62,22 @@
 1. `$ nodemon start`
     * `$ yarn global add nodemon` if you don't have it... this will restart your server on *most* changes
 
-### tests and prettier
-Tests
+### Tests, test coverage & reports, and linter
+Tests (also runs linter on success)
 * `$ yarn test`
 
-Prettier
-1. Finish work, **stage all changes**
-1. `$ yarn prettier` will change files but **not stage those changes**
-1. `$ git add -p` and approve each change you like (y - yes, n - no, s - split the diff, q - quit)
-1. Rerun tests, then commit all approved diffs
-1. `$ git checkout -- .` to discard unapproved diffs
+Test coverage and reports
+* `$ yarn coverage` - runs tests and reports coverage
+* `$ yarn reports` - generates coverage artifacts
+
+Linter alone
+1. `$ yarn lint`
+
+---
 
 ### how did this get made?
+This outlines a large portion of basic beginning setup, but is no longer being extended.
+Subject to deletion.
 
 #### Create basic app
 1. `$ express exp-starter-app` and cd into the created directory

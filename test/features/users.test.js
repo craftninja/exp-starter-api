@@ -6,7 +6,7 @@ require('../helpers/testSetup');
 
 const app = require('../../app');
 
-const User = require('../../models/user');
+const createUser = require('../helpers/objectCreationMethods').createUser;
 const userSerializer = require('../../serializers/user');
 
 describe('Users', () => {
@@ -53,20 +53,15 @@ describe('Users', () => {
   });
 
   it('can be listed for a logged in user only', async () => {
-    const user = await User.create({
-      firstName: 'Elowyn',
-      lastName: 'Platzer Bartel',
-      email: 'elowyn@example.com',
-      birthYear: 2015,
-      student: true,
-      password: 'password',
-    });
-    serializedUser = await userSerializer(user);
-    token = jwt.sign({ user: serializedUser }, process.env.JWT_SECRET);
+    const user = await createUser();
+    const serializedUser = await userSerializer(user);
+    const token = jwt.sign({ user: serializedUser }, process.env.JWT_SECRET);
 
     const resNotLoggedIn = await request(app)
       .get('/users')
       .expect(404);
+
+    expect(resNotLoggedIn.body).toEqual({ message: 'Not Found', error: { status: 404 } });
 
     const resLoggedIn = await request(app)
       .get('/users')
@@ -77,10 +72,14 @@ describe('Users', () => {
     const newUser = resLoggedIn.body.users[0];
     expect(resLoggedIn.jwt).toBe(undefined);
     expect(newUser.id).not.toBe(undefined);
-    expect(newUser.firstName).toEqual('Elowyn');
-    expect(newUser.lastName).toEqual('Platzer Bartel');
-    expect(newUser.email).toEqual('elowyn@example.com');
-    expect(newUser.birthYear).toEqual(2015);
+    expect(newUser).toEqual({
+      id: user.id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      birthYear: user.birthYear,
+      student: user.student,
+    });
     expect(newUser.student).toEqual(true);
 
     expect(newUser.passwordDigest).toEqual(undefined);
@@ -89,25 +88,22 @@ describe('Users', () => {
   });
 
   it('can be shown with a valid user id for a logged in user only', async () => {
-    const user = await User.create({
-      firstName: 'Elowyn',
-      lastName: 'Platzer Bartel',
-      email: 'elowyn@example.com',
-      birthYear: 2015,
-      student: true,
-      password: 'password',
-    });
-    serializedUser = await userSerializer(user);
-    token = jwt.sign({ user: serializedUser }, process.env.JWT_SECRET);
+    const user = await createUser();
+    const serializedUser = await userSerializer(user);
+    const token = jwt.sign({ user: serializedUser }, process.env.JWT_SECRET);
 
     const resNotLoggedIn = await request(app)
       .get(`/users/${user.id}`)
       .expect(404);
 
+    expect(resNotLoggedIn.body).toEqual({ message: 'Not Found', error: { status: 404 } });
+
     const resLoggedInWrongId = await request(app)
       .get(`/users/${user.id + 10}`)
       .set('jwt', token)
       .expect(404);
+
+    expect(resLoggedInWrongId.body).toEqual({ message: 'Not Found', error: { status: 404 } });
 
     const resLoggedIn = await request(app)
       .get(`/users/${user.id}`)
@@ -117,10 +113,14 @@ describe('Users', () => {
     const showUser = resLoggedIn.body.user;
     expect(resLoggedIn.jwt).toBe(undefined);
     expect(showUser.id).not.toBe(undefined);
-    expect(showUser.firstName).toEqual('Elowyn');
-    expect(showUser.lastName).toEqual('Platzer Bartel');
-    expect(showUser.email).toEqual('elowyn@example.com');
-    expect(showUser.birthYear).toEqual(2015);
+    expect(showUser).toEqual({
+      id: showUser.id,
+      firstName: showUser.firstName,
+      lastName: showUser.lastName,
+      email: showUser.email,
+      birthYear: showUser.birthYear,
+      student: showUser.student,
+    });
     expect(showUser.student).toEqual(true);
 
     expect(showUser.passwordDigest).toEqual(undefined);
@@ -129,24 +129,10 @@ describe('Users', () => {
   });
 
   it('can update self only', async () => {
-    const self = await User.create({
-      firstName: 'Elowyyn',
-      lastName: 'Platzer-Bartel',
-      email: 'elowyyn@example.com',
-      birthYear: 2017,
-      student: false,
-      password: 'password',
-    });
-    const other = await User.create({
-      firstName: 'Freyja',
-      lastName: 'Platzer Bartel',
-      email: 'freyja@example.com',
-      birthYear: 2016,
-      student: false,
-      password: 'password',
-    });
-    serializedSelf = await userSerializer(self);
-    selfToken = jwt.sign({ user: serializedSelf }, process.env.JWT_SECRET);
+    const self = await createUser();
+    const other = await createUser();
+    const serializedSelf = await userSerializer(self);
+    const selfToken = jwt.sign({ user: serializedSelf }, process.env.JWT_SECRET);
 
     const resOther = await request(app)
       .put(`/users/${other.id}`)
@@ -160,6 +146,8 @@ describe('Users', () => {
         password: 'password',
       })
       .expect(404);
+
+    expect(resOther.body).toEqual({ message: 'Not Found', error: { status: 404 } });
 
     const resSelf = await request(app)
       .put(`/users/${self.id}`)
@@ -182,24 +170,10 @@ describe('Users', () => {
   });
 
   it('cannot update to pre-existing email address', async () => {
-    const firstUser = await User.create({
-      firstName: 'Elowyn',
-      lastName: 'Platzer-Bartel',
-      email: 'elowyn@example.com',
-      birthYear: 2017,
-      student: false,
-      password: 'password',
-    });
-    const secondUser = await User.create({
-      firstName: 'Elowyn',
-      lastName: 'Other Person',
-      email: 'e@example.com',
-      birthYear: 2000,
-      student: true,
-      password: 'password',
-    });
-    serializedSecondUser = await userSerializer(secondUser);
-    token = jwt.sign({ user: serializedSecondUser }, process.env.JWT_SECRET);
+    const firstUser = await createUser();
+    const secondUser = await createUser();
+    const serializedSecondUser = await userSerializer(secondUser);
+    const token = jwt.sign({ user: serializedSecondUser }, process.env.JWT_SECRET);
 
     const res = await request(app)
       .put(`/users/${secondUser.id}`)
@@ -207,7 +181,7 @@ describe('Users', () => {
       .send({
         firstName: 'Elowyn',
         lastName: 'Other Person',
-        email: 'elowyn@example.com',
+        email: firstUser.email,
         birthYear: 2000,
         student: true,
         password: 'password',
@@ -215,5 +189,20 @@ describe('Users', () => {
       .expect(200);
 
     expect(res.body.user).toEqual({ errors: ['Email already taken'] });
+  });
+
+  it('should trim email whitespaces and down case the email', async () => {
+    const user = await createUser({ email: '  ElowYn@example.com '});
+    const serializedUser = await userSerializer(user);
+    const token = jwt.sign({ user: serializedUser }, process.env.JWT_SECRET);
+
+    const resLoggedIn = await request(app)
+      .get('/users')
+      .set('jwt', token)
+      .expect(200);
+
+    expect(resLoggedIn.body.users.length).toEqual(1);
+    const newUser = resLoggedIn.body.users[0];
+    expect(newUser.email).toEqual('elowyn@example.com');
   });
 });

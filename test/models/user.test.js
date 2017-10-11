@@ -92,7 +92,7 @@ describe('User', () => {
       id: secondUser.id,
       firstName: 'Freyja',
       lastName: 'Puppy',
-      email: 'elowyn@example.com',
+      email: firstUser.email,
       birthYear: 2016,
       student: false,
       password: 'password',
@@ -145,7 +145,7 @@ describe('User', () => {
   });
 
   it('can be found by property', async () => {
-    const user = await User.create({
+    await User.create({
       firstName: 'Elowyn',
       lastName: 'Platzer Bartel',
       email: 'elowyn@example.com',
@@ -154,12 +154,40 @@ describe('User', () => {
       password: 'password',
     });
 
-    const foundUser = await User.findBy({ email: 'elowyn@example.com' });
-    expect(foundUser.firstName).toEqual('Elowyn');
-    expect(foundUser.lastName).toEqual('Platzer Bartel');
-    expect(foundUser.email).toEqual('elowyn@example.com');
-    expect(foundUser.birthYear).toEqual(2015);
-    expect(foundUser.student).toEqual(true);
+    const foundUserByEmail = await User.findBy({ email: 'elowyn@example.com' });
+    expect(foundUserByEmail.firstName).toEqual('Elowyn');
+    expect(foundUserByEmail.lastName).toEqual('Platzer Bartel');
+    expect(foundUserByEmail.email).toEqual('elowyn@example.com');
+    expect(foundUserByEmail.birthYear).toEqual(2015);
+    expect(foundUserByEmail.student).toEqual(true);
+
+    const foundUserByFirstName = await User.findBy({ firstName: 'Elowyn' });
+    expect(foundUserByFirstName.firstName).toEqual('Elowyn');
+    expect(foundUserByFirstName.lastName).toEqual('Platzer Bartel');
+    expect(foundUserByFirstName.email).toEqual('elowyn@example.com');
+    expect(foundUserByFirstName.birthYear).toEqual(2015);
+    expect(foundUserByFirstName.student).toEqual(true);
+
+    const foundUserByLastName = await User.findBy({ lastName: 'Platzer Bartel' });
+    expect(foundUserByLastName.firstName).toEqual('Elowyn');
+    expect(foundUserByLastName.lastName).toEqual('Platzer Bartel');
+    expect(foundUserByLastName.email).toEqual('elowyn@example.com');
+    expect(foundUserByLastName.birthYear).toEqual(2015);
+    expect(foundUserByLastName.student).toEqual(true);
+
+    const foundUserByBirthYear = await User.findBy({ birthYear: '2015' });
+    expect(foundUserByBirthYear.firstName).toEqual('Elowyn');
+    expect(foundUserByBirthYear.lastName).toEqual('Platzer Bartel');
+    expect(foundUserByBirthYear.email).toEqual('elowyn@example.com');
+    expect(foundUserByBirthYear.birthYear).toEqual(2015);
+    expect(foundUserByBirthYear.student).toEqual(true);
+
+    const foundUserByStudent = await User.findBy({ student: true });
+    expect(foundUserByStudent.firstName).toEqual('Elowyn');
+    expect(foundUserByStudent.lastName).toEqual('Platzer Bartel');
+    expect(foundUserByStudent.email).toEqual('elowyn@example.com');
+    expect(foundUserByStudent.birthYear).toEqual(2015);
+    expect(foundUserByStudent.student).toEqual(true);
   });
 
   xit('can be found in multiple by property', async () => {

@@ -33,7 +33,6 @@ exports.show = async (req, res, next) => {
 };
 
 exports.update = async (req, res, next) => {
-  const user = await User.find(req.params.id);
   const updatedUser = await User.update({
     ...req.body,
     ...{ id: req.params.id },
