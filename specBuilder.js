@@ -5,10 +5,11 @@
  * This allows us to write the spec in separate folders and files
  */
 
-const promisify = require('util').promisify;
 const yaml = require('js-yaml');
 const fs = require('fs');
 const path = require('path');
+const promisify = require('util').promisify;
+const swaggerTools = require('swagger-tools');
 
 const specPath = path.resolve(__dirname, './spec');
 const specYamlPath = path.resolve(specPath, 'spec.yaml');
@@ -18,7 +19,7 @@ const readFile = promisify(fs.readFile);
 const stat = promisify(fs.stat);
 
 const throwErr = err => {
-  process.stderr().write(`${JSON.stringify(err)}`);
+  process.stderr.write(`${JSON.stringify(err)}`);
   process.exit(1);
 };
 
@@ -60,6 +61,17 @@ readdir(specPath)
           specObj[key] = yaml.safeLoad(yml[key].toString());
         });
       });
-    fs.writeFileSync(path.resolve(specPath, 'spec.json'), JSON.stringify(specObj, undefined, 2));
+
+    swaggerTools.specs.v2_0.validate(specObj, (err, validationErr) => {
+      if (err) {
+        throwErr(err);
+      }
+
+      if (!validationErr) {
+        fs.writeFileSync(path.resolve(specPath, 'spec.json'), JSON.stringify(specObj, undefined, 2));
+      } else {
+        throw validationErr;
+      }
+    });
   })
   .catch(throwErr);
