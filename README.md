@@ -7,12 +7,14 @@
 # README
 
 ### steeeel it
-* clone it
-* reset your origin url to a new GH url that you own
-* add the repo on your code climate and circle CI account
-* change the urls of all the above badges to reflect your repositories
-* push up the repo and watch for circle and code climate to update
-* do your thing
+* Clone it
+* Reset your origin url to a new GH url that you own
+* Add the repo on your code climate and circle CI account
+* Change the urls of all the above badges to reflect your repositories
+* IMPORTANT: Update the `CC_TEST_REPORTER_ID` with your token in circle.yml
+  * OR if you do not set up Code Climate, remove that line and also remove all "dependencies" and "test" in the circle.yml file
+* Push up the repo and watch for circle and code climate to update
+* Do your thing
 
 ### contribute to it
 * fork, clone, setup locally following the 'set it up' instructions
@@ -46,6 +48,9 @@
 * [x] make code climate happy with trailing commas, eslint or something
 * [x] ~~prettier~~ linter runs with test, throws and describes issue found
 * [x] PR template
+* [ ] swagger - Mickey
+* [ ] mrrrbe repository pattern for models - abstract SQL away from models?
+* [ ] do we yeoman?
 
 ### [curl docs](./curl.md)
 
