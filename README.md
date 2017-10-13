@@ -6,6 +6,32 @@
 
 # README
 
+### set it up
+
+1. `$ yarn install`
+1. `$ cp .env.example .env`
+1. `$ createdb exp_starter_app_test`
+1. `$ createdb exp_starter_app_development`
+1. `$ yarn db:migrate`
+1. `$ yarn db:migrate:test`
+1. rollback to a specific version:
+* `$ MIGRATE_TO=<TIMESTAMP OF MIGRATION> yarn db:migrate`
+1. `$ nodemon start`
+* `$ yarn global add nodemon` if you don't have it... this will restart your server on *most* changes
+
+### Tests, test coverage & reports, and linter
+Tests (also runs linter on success)
+* `$ yarn test`
+
+Test coverage and reports
+* `$ yarn coverage` - runs tests and reports coverage
+* `$ yarn reports` - generates coverage artifacts
+
+Linter alone
+1. `$ yarn lint`
+
+### [curl docs](./curl.md)
+
 ### steeeel it
 * Clone it
 * Reset your origin url to a new GH url that you own
@@ -13,6 +39,7 @@
 * Change the urls of all the above badges to reflect your repositories
 * IMPORTANT: Update the `CC_TEST_REPORTER_ID` with your token in circle.yml
   * OR if you do not set up Code Climate, remove that line and also remove all "dependencies" and "test" in the circle.yml file
+* Follow instructions to set it up renaming database to something that is more useful
 * Push up the repo and watch for circle and code climate to update
 * Do your thing
 
@@ -51,32 +78,6 @@
 * [ ] swagger - Mickey
 * [ ] mrrrbe repository pattern for models - abstract SQL away from models?
 * [ ] do we yeoman?
-
-### [curl docs](./curl.md)
-
-### set it up
-
-1. `$ yarn install`
-1. `$ cp .env.example .env`
-1. `$ createdb exp_starter_app_test`
-1. `$ createdb exp_starter_app_development`
-1. `$ yarn db:migrate`
-1. `$ yarn db:migrate:test`
-1. rollback to a specific version:
-    * `$ MIGRATE_TO=<TIMESTAMP OF MIGRATION> yarn db:migrate`
-1. `$ nodemon start`
-    * `$ yarn global add nodemon` if you don't have it... this will restart your server on *most* changes
-
-### Tests, test coverage & reports, and linter
-Tests (also runs linter on success)
-* `$ yarn test`
-
-Test coverage and reports
-* `$ yarn coverage` - runs tests and reports coverage
-* `$ yarn reports` - generates coverage artifacts
-
-Linter alone
-1. `$ yarn lint`
 
 ---
 
