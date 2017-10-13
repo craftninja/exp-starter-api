@@ -52,13 +52,17 @@ readdir(specPath)
       }));
   })
   .then(ymlResults => {
-    ymlResults = [].concat.apply([], ymlResults);
     const specObj = yaml.safeLoad(fs.readFileSync(specYamlPath));
     ymlResults
       .filter(yml => yml)
-      .forEach(yml => {
-        Object.keys(yml).forEach(key => {
-          specObj[key] = yaml.safeLoad(yml[key].toString());
+      .forEach(ymlArr => {
+        ymlArr.forEach(yml => {
+          Object.keys(yml).forEach(key => {
+            specObj[key] = Object.assign(
+              {},
+              yaml.safeLoad(yml[key].toString()),
+              specObj[key]);
+          });
         });
       });
 

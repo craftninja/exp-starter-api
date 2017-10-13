@@ -10,7 +10,7 @@ exports.index = async (req, res, next) => {
 };
 
 exports.create = async (req, res, next) => {
-  const user = await User.create(req.body);
+  const user = await User.create(req.swagger.params.body.value);
   if (user.errors) {
     res.json({ user });
   } else {
@@ -22,7 +22,7 @@ exports.create = async (req, res, next) => {
 
 exports.show = async (req, res, next) => {
   try {
-    const user = await User.find(req.params.id);
+    const user = await User.find(req.swagger.params.id.value);
     const serializedUser = await userSerializer(user);
     res.json({ user: serializedUser });
   } catch (e) {
@@ -34,8 +34,8 @@ exports.show = async (req, res, next) => {
 
 exports.update = async (req, res, next) => {
   const updatedUser = await User.update({
-    ...req.body,
-    ...{ id: req.params.id },
+    ...req.swagger.params.body.value,
+    ...{ id: req.swagger.params.id.value },
   });
 
   if (updatedUser.errors) {

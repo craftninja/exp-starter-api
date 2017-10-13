@@ -11,9 +11,7 @@ if (!swaggerSpec) {
   throw new Error('No swagger spec was found under ./spec/spec.json!');
 }
 
-const index = require('./routes/index');
-const login = require('./routes/login');
-const users = require('./routes/users');
+const handlers = require('./handlers');
 
 const app = express();
 
@@ -22,15 +20,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-app.use('/', index);
-app.use('/login', login);
-app.use('/users', users);
-
-// app.use(function(req, res, next) {
-//   const err = new Error('Not Found');
-//   err.status = 404;
-//   next(err);
-// });
+app.use(handlers);
 
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
@@ -46,9 +36,9 @@ app.use(function(err, req, res, next) {
 
 swaggerTools.initializeMiddleware(swaggerSpec, middleware => {
   app.use(middleware.swaggerMetadata());
-  app.use(middleware.swaggerValidator({ validateResponse: true }));
+  app.use(middleware.swaggerValidator({ validateResponse: false }));
   app.use(middleware.swaggerRouter({
-    controllers: path.resolve(__dirname, 'routes'),
+    controllers: path.resolve(__dirname, 'controllers'),
     useStubs: false
   }));
   app.use(middleware.swaggerUi());

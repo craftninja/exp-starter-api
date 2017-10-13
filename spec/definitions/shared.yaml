@@ -1,0 +1,7 @@
+jwtUser:
+  type: object
+  properties:
+    jwt:
+      type: string
+    user:
+      $ref: '#/definitions/user'

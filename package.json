@@ -12,6 +12,7 @@
     "lint": "eslint --ignore-path .gitignore .",
     "report": "nyc report --reporter=lcov",
     "start": "node ./bin/www",
+    "spec:build": "node specBuilder.js",
     "test": "mocha --recursive && (yarn lint || npm lint)"
   },
   "dependencies": {
