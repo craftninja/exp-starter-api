@@ -2,5 +2,5 @@ jwt:
   name: jwt
   in: header
   description: Json web token
-  required: true
+  required: false
   type: string

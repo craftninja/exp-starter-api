@@ -11,7 +11,7 @@ user:
       type: number
       format: int32
     student:
-      type: string
+      type: boolean
     password:
       type: string
     passwordDigest:
