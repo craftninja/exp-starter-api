@@ -16,5 +16,5 @@
 ##### show
 * `curl -H "jwt: <YOUR JWT TOKEN>" http://localhost:3000/users/<ANY VALID USER ID>`
 
-##### udpate
+##### update
 * `curl -X PUT -H "jwt: <YOUR JWT TOKEN>" -H "Content-Type: application/json" -d '{"email":"elowyn@example.com", "password": "password", "firstName": "Freyja", "lastName": "Platzer Bartel", "birthYear": "2016", "student": "false"}' http://localhost:3000/users/<YOUR USER ID>`
