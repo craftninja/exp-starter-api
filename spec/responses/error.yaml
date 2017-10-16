@@ -1,0 +1,9 @@
+error:
+  description: Error response
+  schema:
+    type: object
+    properties:
+      statusCode:
+        type: string
+      message:
+        type: string

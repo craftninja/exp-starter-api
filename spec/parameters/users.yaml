@@ -1,0 +1,15 @@
+userBody:
+  name: body
+  in: body
+  description: Post body for login
+  required: true
+  schema:
+    $ref: '#/definitions/user'
+
+pathId:
+  name: id
+  in: path
+  description: User ID in path
+  required: true
+  type: number
+  format: int32

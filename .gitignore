@@ -2,3 +2,5 @@
 coverage/
 node_modules/
 .env
+.vscode/
+spec/spec.json

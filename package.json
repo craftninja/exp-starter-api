@@ -12,6 +12,7 @@
     "lint": "eslint --ignore-path .gitignore .",
     "report": "nyc report --reporter=lcov",
     "start": "node ./bin/www",
+    "spec:build": "node specBuilder.js",
     "test": "mocha --recursive && (yarn lint || npm lint)"
   },
   "dependencies": {
@@ -20,10 +21,12 @@
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.3",
     "express": "~4.15.2",
+    "js-yaml": "^3.10.0",
     "jsonwebtoken": "^8.0.1",
     "morgan": "~1.8.1",
     "pg": "^7.3.0",
-    "postgrator": "^2.10.2"
+    "postgrator": "^2.10.2",
+    "swagger-tools": "^0.10.2"
   },
   "devDependencies": {
     "dotenv": "^4.0.0",
@@ -31,6 +34,7 @@
     "expect": "^21.1.0",
     "mocha": "^3.5.3",
     "nyc": "^11.2.1",
+    "proxyquire": "^1.8.0",
     "supertest": "^3.0.0"
   }
 }

@@ -1,0 +1,70 @@
+/users:
+  post:
+    tags:
+    - users
+    summary: Create user
+    description: Creates a new user
+    x-swagger-router-controller: users
+    operationId: create
+    parameters:
+    - $ref: '#/parameters/userBody'
+    responses:
+      200:
+        description: success
+        schema:
+          $ref: '#/definitions/jwtUser'
+      default:
+        $ref: '#/responses/error'
+  get:
+    tags:
+    - users
+    summary: Get all users
+    description: Retrieves an array of all users
+    x-swagger-router-controller: users
+    operationId: index
+    parameters:
+    - $ref: '#/parameters/jwt'
+    responses:
+      200:
+        description: success
+        schema:
+          $ref: '#/definitions/users'
+      default:
+        $ref: '#/responses/error'
+
+/users/{id}:
+  get:
+    tags:
+    - users
+    summary: Get a user
+    description: Gets a user (if the user is permitted to view the requested user data)
+    x-swagger-router-controller: users
+    operationId: show
+    parameters:
+    - $ref: '#/parameters/pathId'
+    - $ref: '#/parameters/jwt'
+    responses:
+      200:
+        description: success
+        schema:
+          $ref: '#/definitions/user'
+      default:
+        $ref: '#/responses/error'
+  put:
+    tags:
+    - users
+    summary: Update user info
+    description: Edits a user's information
+    x-swagger-router-controller: users
+    operationId: update
+    parameters:
+    - $ref: '#/parameters/pathId'
+    - $ref: '#/parameters/jwt'
+    - $ref: '#/parameters/userBody'
+    responses:
+      200:
+        description: success
+        schema:
+          $ref: '#/definitions/user'
+      default:
+        $ref: '#/responses/error'

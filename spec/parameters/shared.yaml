@@ -1,0 +1,6 @@
+jwt:
+  name: jwt
+  in: header
+  description: Json web token
+  required: false
+  type: string

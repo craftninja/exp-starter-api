@@ -1,0 +1,23 @@
+user:
+  type: object
+  properties:
+    firstName:
+      type: string
+    lastName:
+      type: string
+    email:
+      type: string
+    birthYear:
+      type: number
+      format: int32
+    student:
+      type: boolean
+    password:
+      type: string
+    passwordDigest:
+      type: string
+
+users:
+  type: array
+  items:
+    $ref: '#/definitions/user'

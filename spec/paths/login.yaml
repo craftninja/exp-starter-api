@@ -1,0 +1,17 @@
+/login:
+  post:
+    tags:
+    - login
+    summary: Login
+    description: Logs the user in
+    x-swagger-router-controller: login
+    operationId: create
+    parameters:
+    - $ref: '#/parameters/userBody'
+    responses:
+      200:
+        description: Success
+        schema:
+          $ref: '#/definitions/jwtUser'
+      default:
+        $ref: '#/responses/error'
