@@ -1,5 +1,5 @@
 error:
-  description: Error object scaffolding
+  description: Error response
   schema:
     type: object
     properties:

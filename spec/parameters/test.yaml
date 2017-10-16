@@ -1,5 +1,0 @@
-testParameter:
-  name: test
-  in: query
-  type: string
-  required: true

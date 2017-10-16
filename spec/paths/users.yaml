@@ -13,6 +13,8 @@
         description: success
         schema:
           $ref: '#/definitions/jwtUser'
+      default:
+        $ref: '#/responses/error'
   get:
     tags:
     - users
@@ -27,6 +29,8 @@
         description: success
         schema:
           $ref: '#/definitions/users'
+      default:
+        $ref: '#/responses/error'
 
 /users/{id}:
   get:
@@ -44,6 +48,8 @@
         description: success
         schema:
           $ref: '#/definitions/user'
+      default:
+        $ref: '#/responses/error'
   put:
     tags:
     - users
@@ -60,3 +66,5 @@
         description: success
         schema:
           $ref: '#/definitions/user'
+      default:
+        $ref: '#/responses/error'

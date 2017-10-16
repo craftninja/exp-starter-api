@@ -13,3 +13,5 @@
         description: Success
         schema:
           $ref: '#/definitions/jwtUser'
+      default:
+        $ref: '#/responses/error'
