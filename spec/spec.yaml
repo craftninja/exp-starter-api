@@ -8,5 +8,3 @@ tags:
   description: Login endpoints
 - name: users
   description: User management endpoints
-- name: test
-  description: Putting tags on your paths objects will organize them in the Swagger UI!

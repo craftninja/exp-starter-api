@@ -37,45 +37,50 @@ async function concatSpecFiles(dir) {
   }));
 }
 
-readdir(specPath)
-  .then(itemNames => {
-    return Promise.all(
-      itemNames.map(name => {
-        const itemPath = path.resolve(specPath, name);
-        return stat(itemPath)
-          .then(stats => {
-            return stats.isDirectory()
-              ? concatSpecFiles(name)
-              : Promise.resolve();
-          })
-          .catch(throwErr);
-      }));
-  })
-  .then(ymlResults => {
-    const specObj = yaml.safeLoad(fs.readFileSync(specYamlPath));
-    ymlResults
-      .filter(yml => yml)
-      .forEach(ymlArr => {
-        ymlArr.forEach(yml => {
-          Object.keys(yml).forEach(key => {
-            specObj[key] = Object.assign(
-              {},
-              yaml.safeLoad(yml[key].toString()),
-              specObj[key]);
+const makeSpec = () => {
+  return readdir(specPath)
+    .then(itemNames => {
+      return Promise.all(
+        itemNames.map(name => {
+          const itemPath = path.resolve(specPath, name);
+          return stat(itemPath)
+            .then(stats => {
+              return stats.isDirectory()
+                ? concatSpecFiles(name)
+                : Promise.resolve();
+            })
+            .catch(throwErr);
+        }));
+    })
+    .then(ymlResults => {
+      const specObj = yaml.safeLoad(fs.readFileSync(specYamlPath));
+
+      ymlResults
+        .filter(yml => yml)
+        .forEach(ymlArr => {
+          ymlArr.forEach(yml => {
+            Object.keys(yml).forEach(key => {
+              specObj[key] = Object.assign(
+                {},
+                yaml.safeLoad(yml[key].toString()),
+                specObj[key]);
+            });
           });
         });
+
+      swaggerTools.specs.v2_0.validate(specObj, (err, validationErr) => {
+        if (err) {
+          throwErr(err);
+        }
+
+        if (!validationErr) {
+          fs.writeFileSync(path.resolve(specPath, 'spec.json'), JSON.stringify(specObj, undefined, 2));
+        } else {
+          throw validationErr;
+        }
       });
+    })
+    .catch(throwErr);
+};
 
-    swaggerTools.specs.v2_0.validate(specObj, (err, validationErr) => {
-      if (err) {
-        throwErr(err);
-      }
-
-      if (!validationErr) {
-        fs.writeFileSync(path.resolve(specPath, 'spec.json'), JSON.stringify(specObj, undefined, 2));
-      } else {
-        throw validationErr;
-      }
-    });
-  })
-  .catch(throwErr);
+makeSpec();
