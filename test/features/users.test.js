@@ -169,6 +169,34 @@ describe('Users', () => {
     expect(resSelf.body.user.student).toBe(true);
   });
 
+  it('can update to using own pre-existing email address', async () => {
+    const user = await createUser();
+    const serializedSecondUser = await userSerializer(user);
+    const token = jwt.sign({ user: serializedSecondUser }, process.env.JWT_SECRET);
+
+    const res = await request(app)
+      .put(`/users/${user.id}`)
+      .set('jwt', token)
+      .send({
+        firstName: 'Elowyn',
+        lastName: 'Platzer Bartel',
+        email: user.email,
+        birthYear: 2015,
+        student: true,
+        password: 'password',
+      })
+      .expect(200);
+
+    expect(res.body.user).toEqual({
+      id: user.id,
+      birthYear: 2015,
+      email: user.email,
+      firstName: 'Elowyn',
+      lastName: 'Platzer Bartel',
+      student: true
+    });
+  });
+
   it('cannot update to pre-existing email address', async () => {
     const firstUser = await createUser();
     const secondUser = await createUser();

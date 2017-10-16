@@ -103,7 +103,7 @@ exports.findBy = async property => {
 exports.update = async properties => {
   const errors = [];
   const existingEmailUser = await this.findBy({ email: properties.email });
-  if (existingEmailUser && existingEmailUser.id !== properties.id) {
+  if (existingEmailUser && existingEmailUser.id !== Number(properties.id)) {
     const error = 'Email already taken';
     errors.push(error);
   }
