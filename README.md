@@ -78,6 +78,7 @@ Linter alone
 * [ ] swagger - Mickey
 * [ ] mrrrbe repository pattern for models - abstract SQL away from models?
 * [ ] do we yeoman?
+* [ ] Create stored procedures and move SQL queries out of models; update models to invoke stored procedures
 
 ---
 
