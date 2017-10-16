@@ -19,6 +19,13 @@
 1. `$ nodemon start`
 * `$ yarn global add nodemon` if you don't have it... this will restart your server on *most* changes
 
+### deploy to heroku:
+1. create app on heroku
+1. add Heroku Postgres add-on
+1. add needed envs (no need to add test database url or database url, database url should already be created)
+1. `$ heroku run yarn db:migrate`
+1. `$ heroku logs --tail` if you need to see logs
+
 ### Tests, test coverage & reports, and linter
 Tests (also runs linter on success)
 * `$ yarn test`
@@ -52,29 +59,7 @@ Linter alone
 * periodically pull upstream master into master, and rebase the branch on top, force pushing the rebased branch when necessary
 
 ### todo
-* [x] prettier
-* [x] signup
-* [x] testing for signup fails - user must have unique email
-* [x] login
-* [x] testing for login fails
-* [x] users index - only users
-* [x] testing for malformed JWT
-* [x] users show - only users
-* [x] users update - only self
-* [x] users update feature test - get validation error
-* [x] model test - user cannot update email to a pre-existing email address
-* [x] model test - user cannot update email to a pre-existing email address regardless of case
-* [x] model test - user cannot update email to a pre-existing email address regardless of spaces on either end of entry
-* [x] migration - email must be unique on db
-* [x] update to Node 8xx I guess 🙄
-* [x] object creation methods? createUser() or createUser(overrides)
-* [x] `createUser()` creates "unique" users each time with Math.rand or whatevs 4 random numbers? at the end of everything
-* [ ] import statements instead of requires where possible?
-* [x] model test - findBy other than email (everything on user)
-* [x] add circle, code climate
-* [x] make code climate happy with trailing commas, eslint or something
-* [x] ~~prettier~~ linter runs with test, throws and describes issue found
-* [x] PR template
+* [ ] user can update their info using the same email
 * [ ] swagger - Mickey
 * [ ] mrrrbe repository pattern for models - abstract SQL away from models?
 * [ ] do we yeoman?
