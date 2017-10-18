@@ -16,36 +16,8 @@ clearDB().then(async () => {
     password: 'password',
   });
 
-  const jillian = await User.create({
-    firstName: 'Jillian',
-    lastName: 'Holtzman',
-    email: 'jillian@example.com',
-    birthYear: 1984,
-    student: false,
-    password: 'password',
-  });
-
-  const leslie = await User.create({
-    firstName: 'Leslie',
-    lastName: 'Jones',
-    email: 'leslie@example.com',
-    birthYear: 1967,
-    student: false,
-    password: 'password',
-  });
-
-  const laverne = await User.create({
-    firstName: 'Laverne',
-    lastName: 'Cox',
-    email: 'laverne@example.com',
-    birthYear: 1972,
-    student: false,
-    password: 'password',
-  });
-
-  const users = [beyonce, jillian, leslie, laverne];
   /* eslint-disable no-console */
-  console.log(`Created users \n${ users.map(user => '  ' + user.firstName + '\n') }`);
+  console.log(`Created user ${ beyonce.firstName } ${ beyonce.lastName }`);
   /* eslint-enable no-console */
   await process.exit();
 });
