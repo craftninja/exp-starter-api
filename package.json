@@ -9,6 +9,8 @@
     "coverage": "nyc mocha --recursive",
     "db:migrate": "node postgrator.js",
     "db:migrate:test": "NODE_ENV=test node postgrator.js",
+    "db:seed": "for file in ./seeds/*.js; do node $file; done",
+    "db:seed:windows": "for %f in (./seeds/*) do node ./seeds/%f",
     "lint": "eslint --ignore-path .gitignore .",
     "report": "nyc report --reporter=lcov",
     "start": "node ./bin/www",

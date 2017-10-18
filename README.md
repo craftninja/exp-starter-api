@@ -15,9 +15,9 @@
 1. `$ yarn db:migrate`
 1. `$ yarn db:migrate:test`
 1. rollback to a specific version:
-* `$ MIGRATE_TO=<TIMESTAMP OF MIGRATION> yarn db:migrate`
+    * `$ MIGRATE_TO=<TIMESTAMP OF MIGRATION> yarn db:migrate`
 1. `$ nodemon start`
-* `$ yarn global add nodemon` if you don't have it... this will restart your server on *most* changes
+    * `$ yarn global add nodemon` if you don't have it... this will restart your server on *most* changes
 
 ### deploy to heroku:
 1. create app on heroku
@@ -59,9 +59,10 @@ Linter alone
 * periodically pull upstream master into master, and rebase the branch on top, force pushing the rebased branch when necessary
 
 ### todo
-* [ ] user can update their info using the same email
-* [ ] swagger - Mickey
+* [x] user can update their info using the same email
+* [x] seeds
 * [ ] mrrrbe repository pattern for models - abstract SQL away from models?
+* [ ] swagger
 * [ ] do we yeoman?
 
 ---
