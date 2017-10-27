@@ -44,8 +44,20 @@ Linter alone
 * Reset your origin url to a new GH url that you own
 * Add the repo on your code climate and circle CI account
 * Change the urls of all the above badges to reflect your repositories
-* IMPORTANT: Update the `CC_TEST_REPORTER_ID` with your token in circle.yml
-  * OR if you do not set up Code Climate, remove that line and also remove all "dependencies" and "test" in the circle.yml file
+* IMPORTANT: Update the `CC_TEST_REPORTER_ID` with your token in .circleci/config.yml
+  * OR if you do not set up Code Climate, remove the following lines:
+      ```
+      - image: notnoopci/php:7.1.5-browsers
+      ...
+      - run: curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+      - run: chmod +x ./cc-test-reporter
+      - run: sudo mkdir -p $CIRCLE_TEST_REPORTS/phpunit
+      - run: ./cc-test-reporter before-build
+      - run: yarn lint; yarn coverage; yarn report;
+      - run: ./cc-test-reporter after-build -t lcov --exit-code $?
+      ```
+  * add `run: yarn lint; yarn test;` in the place of those lines
+  * also remove the code climate badges up top
 * Follow instructions to set it up renaming database to something that is more useful
 * Push up the repo and watch for circle and code climate to update
 * Do your thing
