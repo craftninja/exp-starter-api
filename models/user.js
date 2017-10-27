@@ -42,10 +42,6 @@ exports.create = async properties => {
   const salt = bcrypt.genSaltSync(saltRounds);
   const passwordDigest = bcrypt.hashSync(properties.password, salt);
 
-  const formatEmail = (email) => {
-    return email.trim().toLowerCase();
-  };
-
   const createdUser = (await query(
     `INSERT INTO "users"(
       "firstName",
@@ -100,7 +96,16 @@ exports.findBy = async property => {
   return user;
 };
 
-exports.update = async properties => {
+exports.update = async newProperties => {
+  const oldProps = await this.find(newProperties.id);
+  const properties = { ...oldProps, ...newProperties };
+  if (newProperties.password) {
+    const saltRounds = 10;
+    const salt = bcrypt.genSaltSync(saltRounds);
+    const passwordDigest = bcrypt.hashSync(newProperties.password, salt);
+    properties.passwordDigest = passwordDigest;
+  }
+
   const errors = [];
   const existingEmailUser = await this.findBy({ email: properties.email });
   if (existingEmailUser && existingEmailUser.id !== Number(properties.id)) {
@@ -110,10 +115,6 @@ exports.update = async properties => {
   if (errors.length > 0) {
     return { errors: errors };
   }
-
-  const saltRounds = 10;
-  const salt = bcrypt.genSaltSync(saltRounds);
-  const passwordDigest = bcrypt.hashSync(properties.password, salt);
 
   const updatedUser = (await query(
     `UPDATE "users" SET
@@ -126,13 +127,17 @@ exports.update = async properties => {
     [
       properties.firstName,
       properties.lastName,
-      properties.email,
+      formatEmail(properties.email),
       properties.birthYear,
       properties.student,
-      passwordDigest,
+      properties.passwordDigest,
       properties.id,
     ]
   )).rows[0];
 
   return updatedUser;
 };
+
+function formatEmail(email) {
+  return email.trim().toLowerCase();
+}

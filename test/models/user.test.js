@@ -44,6 +44,27 @@ describe('User', () => {
     expect(users.length).toBe(1);
   });
 
+
+  it('removes email whitespaces, down cases on create/update ', async () => {
+    const user = await User.create({
+      firstName: 'Elowyn',
+      lastName: 'Platzer Bartel',
+      email: '  ElowYn@example.com ',
+      birthYear: 2015,
+      student: true,
+      password: 'password',
+    });
+
+    expect(user.email).toEqual('elowyn@example.com');
+
+    const updatedUser = await User.update({
+      id: user.id,
+      email: '  ElowYn@example.com ',
+    });
+
+    expect(updatedUser.email).toEqual('elowyn@example.com');
+  });
+
   it('can be updated', async () => {
     const originalUser = await User.create({
       firstName: 'Elowyn',

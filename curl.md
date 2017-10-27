@@ -22,5 +22,7 @@
 * `curl -H "jwt: <YOUR JWT TOKEN>" https://exp-starter-api.herokuapp.com/users/<ANY VALID USER ID>`
 
 ##### update
+This is a patch type update, so just send the stuff that is different!
+
 * `curl -X PUT -H "jwt: <YOUR JWT TOKEN>" -H "Content-Type: application/json" -d '{"email":"freyja@example.com", "password": "password", "firstName": "Freyja", "lastName": "Platzer Bartel", "birthYear": "2016", "student": "false"}' http://localhost:3000/users/<YOUR USER ID>`
 * `curl -X PUT -H "jwt: <YOUR JWT TOKEN>" -H "Content-Type: application/json" -d '{"email":"freyja@example.com", "password": "password", "firstName": "Freyja", "lastName": "Platzer Bartel", "birthYear": "2016", "student": "false"}' https://exp-starter-api.herokuapp.com/users/<YOUR USER ID>`
