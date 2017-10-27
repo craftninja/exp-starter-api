@@ -29,22 +29,14 @@ exports.authenticate = async credentials => {
 };
 
 exports.create = async properties => {
-  const errors = [];
-  if (await this.findBy({ email: properties.email })) {
-    const error = 'Email already taken';
-    errors.push(error);
-  }
-  if (errors.length > 0) {
-    return { errors: errors };
+  const errors = await validate(properties);
+  if (errors) {
+    return { errors };
   }
 
   const saltRounds = 10;
   const salt = bcrypt.genSaltSync(saltRounds);
   const passwordDigest = bcrypt.hashSync(properties.password, salt);
-
-  const formatEmail = (email) => {
-    return email.trim().toLowerCase();
-  };
 
   const createdUser = (await query(
     `INSERT INTO "users"(
@@ -100,20 +92,20 @@ exports.findBy = async property => {
   return user;
 };
 
-exports.update = async properties => {
-  const errors = [];
-  const existingEmailUser = await this.findBy({ email: properties.email });
-  if (existingEmailUser && existingEmailUser.id !== Number(properties.id)) {
-    const error = 'Email already taken';
-    errors.push(error);
-  }
-  if (errors.length > 0) {
-    return { errors: errors };
+exports.update = async newProperties => {
+  const oldProps = await this.find(newProperties.id);
+  const properties = { ...oldProps, ...newProperties };
+  if (newProperties.password) {
+    const saltRounds = 10;
+    const salt = bcrypt.genSaltSync(saltRounds);
+    const passwordDigest = bcrypt.hashSync(newProperties.password, salt);
+    properties.passwordDigest = passwordDigest;
   }
 
-  const saltRounds = 10;
-  const salt = bcrypt.genSaltSync(saltRounds);
-  const passwordDigest = bcrypt.hashSync(properties.password, salt);
+  const errors = await validate(properties);
+  if (errors) {
+    return { errors };
+  }
 
   const updatedUser = (await query(
     `UPDATE "users" SET
@@ -126,13 +118,32 @@ exports.update = async properties => {
     [
       properties.firstName,
       properties.lastName,
-      properties.email,
+      formatEmail(properties.email),
       properties.birthYear,
       properties.student,
-      passwordDigest,
+      properties.passwordDigest,
       properties.id,
     ]
   )).rows[0];
 
   return updatedUser;
 };
+
+function formatEmail(email) {
+  return email.trim().toLowerCase();
+}
+
+async function validate(properties) {
+  const errors = [];
+
+  const existingEmailUser = await exports.findBy({ email: properties.email });
+  const thatEmailIsntMe = existingEmailUser ? existingEmailUser.id !== Number(properties.id) : false;
+  if (existingEmailUser && thatEmailIsntMe) {
+    const error = 'Email already taken';
+    errors.push(error);
+  }
+
+  if (errors.length > 0) {
+    return errors;
+  }
+}

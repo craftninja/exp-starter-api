@@ -154,22 +154,17 @@ describe('Users', () => {
       .set('jwt', selfToken)
       .send({
         firstName: 'Elowyn',
-        lastName: 'Platzer Bartel',
-        email: 'elowyn@example.com',
-        birthYear: 2015,
-        student: true,
-        password: 'password',
       })
       .expect(200);
 
     expect(resSelf.body.user.firstName).toBe('Elowyn');
-    expect(resSelf.body.user.lastName).toBe('Platzer Bartel');
-    expect(resSelf.body.user.email).toBe('elowyn@example.com');
-    expect(resSelf.body.user.birthYear).toBe(2015);
-    expect(resSelf.body.user.student).toBe(true);
+    expect(resSelf.body.user.lastName).toBe(self.lastName);
+    expect(resSelf.body.user.email).toBe(self.email);
+    expect(resSelf.body.user.birthYear).toBe(self.birthYear);
+    expect(resSelf.body.user.student).toBe(self.student);
   });
 
-  it('can update to using own pre-existing email address', async () => {
+  it('can update to with same pre-existing email address', async () => {
     const user = await createUser();
     const serializedSecondUser = await userSerializer(user);
     const token = jwt.sign({ user: serializedSecondUser }, process.env.JWT_SECRET);
@@ -179,21 +174,16 @@ describe('Users', () => {
       .set('jwt', token)
       .send({
         firstName: 'Elowyn',
-        lastName: 'Platzer Bartel',
-        email: user.email,
-        birthYear: 2015,
-        student: true,
-        password: 'password',
       })
       .expect(200);
 
     expect(res.body.user).toEqual({
       id: user.id,
-      birthYear: 2015,
+      birthYear: user.birthYear,
       email: user.email,
       firstName: 'Elowyn',
-      lastName: 'Platzer Bartel',
-      student: true
+      lastName: user.lastName,
+      student: user.student
     });
   });
 
@@ -207,30 +197,10 @@ describe('Users', () => {
       .put(`/users/${secondUser.id}`)
       .set('jwt', token)
       .send({
-        firstName: 'Elowyn',
-        lastName: 'Other Person',
         email: firstUser.email,
-        birthYear: 2000,
-        student: true,
-        password: 'password',
       })
       .expect(200);
 
     expect(res.body.user).toEqual({ errors: ['Email already taken'] });
-  });
-
-  it('should trim email whitespaces and down case the email', async () => {
-    const user = await createUser({ email: '  ElowYn@example.com '});
-    const serializedUser = await userSerializer(user);
-    const token = jwt.sign({ user: serializedUser }, process.env.JWT_SECRET);
-
-    const resLoggedIn = await request(app)
-      .get('/users')
-      .set('jwt', token)
-      .expect(200);
-
-    expect(resLoggedIn.body.users.length).toEqual(1);
-    const newUser = resLoggedIn.body.users[0];
-    expect(newUser.email).toEqual('elowyn@example.com');
   });
 });
