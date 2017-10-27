@@ -58,6 +58,7 @@ Linter alone
       ```
   * add `run: yarn lint; yarn test;` in the place of those lines
   * also remove the code climate badges up top
+* Follow instructions [here](https://gist.github.com/lauraturk/93742fd34101a0f15b988f3d3b27104d) to setup deploys to Heroku
 * Follow instructions to set it up renaming database to something that is more useful
 * Push up the repo and watch for circle and code climate to update
 * Do your thing
