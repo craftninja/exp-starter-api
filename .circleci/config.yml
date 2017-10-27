@@ -9,14 +9,15 @@ jobs:
           NODE_ENV: test
           CC_TEST_REPORTER_ID: 146045ec6c83cd0f7fb5d6ba71fb8a7c24ee8d52e275b7bd4ed291a870831402
           JWT_SECRET: SuPeRsEcReTy
-          TEST_DATABASE_URL: postgres://localhost/exp_starter_app_test
+          TEST_DATABASE_URL: postgres://localhost/exp_starter_api_test
       - image: circleci/postgres:9.6.2
         environment:
           POSTGRES_USER: user
           POSTGRES_PASSWORD: ""
-          POSTGRES_DB: exp_starter_app_test
+          POSTGRES_DB: exp_starter_api_test
+      - image: notnoopci/php:7.1.5-browsers
 
-    working_directory: ~/repo
+    working_directory: ~/exp_starter_api
 
     steps:
       - checkout
@@ -35,8 +36,10 @@ jobs:
           command:
             yarn db:migrate:test
           environment:
-            TEST_DATABASE_URL: postgres://user@localhost:5432/exp_starter_app_test
-      - run: ./cc-test-reporter before-build
-      - run: yarn lint; yarn coverage; yarn report; ./cc-test-reporter after-build -t lcov --exit-code $?
+            TEST_DATABASE_URL: postgres://user@localhost:5432/exp_starter_api_test
       - run: curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
       - run: chmod +x ./cc-test-reporter
+      - run: sudo mkdir -p $CIRCLE_TEST_REPORTS/phpunit
+      - run: ./cc-test-reporter before-build
+      - run: yarn lint; yarn coverage; yarn report;
+      - run: ./cc-test-reporter after-build -t lcov --exit-code $?
