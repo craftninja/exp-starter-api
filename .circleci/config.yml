@@ -7,7 +7,6 @@ jobs:
           PGHOST: 127.0.0.1
           PGUSER: user
           NODE_ENV: test
-          CC_TEST_REPORTER_ID: 146045ec6c83cd0f7fb5d6ba71fb8a7c24ee8d52e275b7bd4ed291a870831402
           JWT_SECRET: SuPeRsEcReTy
           TEST_DATABASE_URL: postgres://localhost/exp_starter_api_test
       - image: circleci/postgres:9.6.2

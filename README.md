@@ -44,7 +44,7 @@ Linter alone
 * Reset your origin url to a new GH url that you own
 * Add the repo on your code climate and circle CI account
 * Change the urls of all the above badges to reflect your repositories
-* IMPORTANT: Update the `CC_TEST_REPORTER_ID` with your token in .circleci/config.yml
+* IMPORTANT: Update the `CC_TEST_REPORTER_ID` with your token in Environmental Variable settings for your project on CircleCI
   * OR if you do not set up Code Climate, remove the following lines:
       ```
       - image: notnoopci/php:7.1.5-browsers
