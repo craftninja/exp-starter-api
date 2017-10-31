@@ -1,0 +1,55 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/node:8.8.1
+        environment:
+          PGHOST: 127.0.0.1
+          PGUSER: user
+          NODE_ENV: test
+          JWT_SECRET: SuPeRsEcReTy
+          TEST_DATABASE_URL: postgres://localhost/exp_starter_api_test
+      - image: circleci/postgres:9.6.2
+        environment:
+          POSTGRES_USER: user
+          POSTGRES_PASSWORD: ""
+          POSTGRES_DB: exp_starter_api_test
+      - image: notnoopci/php:7.1.5-browsers
+
+    working_directory: ~/exp_starter_api
+
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+          - v1-dependencies-
+      - run: yarn install
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+      - run: dockerize -wait tcp://localhost:5432 -timeout 1m
+      - run:
+          name: Set up DB
+          command:
+            yarn db:migrate:test
+          environment:
+            TEST_DATABASE_URL: postgres://user@localhost:5432/exp_starter_api_test
+      - run: curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+      - run: chmod +x ./cc-test-reporter
+      - run: sudo mkdir -p $CIRCLE_TEST_REPORTS/phpunit
+      - run: ./cc-test-reporter before-build
+      - run: yarn lint; yarn coverage; yarn report;
+      - run: ./cc-test-reporter after-build -t lcov --exit-code $?
+      - run: bash .circleci/setup-heroku.sh
+      - add_ssh_keys:
+          fingerprints:
+            - $HEROKU_SSH_FINGERPRINT
+      - deploy:
+          name: Deploy to Heroku if tests pass and branch is master
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              git push --force git@heroku.com:$HEROKU_APP_NAME.git HEAD:refs/heads/master
+              # <any other necessary commands for heroku deployment you might need can go here>
+            fi

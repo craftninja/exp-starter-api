@@ -1,4 +1,4 @@
-### What does this PR do? (User can login)
+### What does this PR do?
 
 ### Where should someone start to review?
 

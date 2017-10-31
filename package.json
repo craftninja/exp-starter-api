@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "engines": {
-    "node": ">=8.7.0"
+    "node": ">=8.8.1"
   },
   "scripts": {
     "coverage": "nyc mocha --recursive",
