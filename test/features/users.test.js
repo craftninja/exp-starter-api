@@ -7,7 +7,6 @@ require('../helpers/testSetup');
 const app = require('../../app');
 
 const createUser = require('../helpers/objectCreationMethods').createUser;
-const userSerializer = require('../../serializers/user');
 
 describe('Users', () => {
   it('can signup with unique email and receive a JWT', async () => {
@@ -54,8 +53,7 @@ describe('Users', () => {
 
   it('can be listed for a logged in user only', async () => {
     const user = await createUser();
-    const serializedUser = await userSerializer(user);
-    const token = jwt.sign({ user: serializedUser }, process.env.JWT_SECRET);
+    const token = jwt.sign({ currentUserId: user.id }, process.env.JWT_SECRET);
 
     const resNotLoggedIn = await request(app)
       .get('/users')
@@ -89,8 +87,7 @@ describe('Users', () => {
 
   it('can be shown with a valid user id for a logged in user only', async () => {
     const user = await createUser();
-    const serializedUser = await userSerializer(user);
-    const token = jwt.sign({ user: serializedUser }, process.env.JWT_SECRET);
+    const token = jwt.sign({ currentUserId: user.id }, process.env.JWT_SECRET);
 
     const resNotLoggedIn = await request(app)
       .get(`/users/${user.id}`)
@@ -131,8 +128,7 @@ describe('Users', () => {
   it('can update self only', async () => {
     const self = await createUser();
     const other = await createUser();
-    const serializedSelf = await userSerializer(self);
-    const selfToken = jwt.sign({ user: serializedSelf }, process.env.JWT_SECRET);
+    const selfToken = jwt.sign({ currentUserId: self.id }, process.env.JWT_SECRET);
 
     const resOther = await request(app)
       .put(`/users/${other.id}`)
@@ -166,8 +162,7 @@ describe('Users', () => {
 
   it('can update to with same pre-existing email address', async () => {
     const user = await createUser();
-    const serializedSecondUser = await userSerializer(user);
-    const token = jwt.sign({ user: serializedSecondUser }, process.env.JWT_SECRET);
+    const token = jwt.sign({ currentUserId: user.id }, process.env.JWT_SECRET);
 
     const res = await request(app)
       .put(`/users/${user.id}`)
@@ -190,8 +185,7 @@ describe('Users', () => {
   it('cannot update to pre-existing email address', async () => {
     const firstUser = await createUser();
     const secondUser = await createUser();
-    const serializedSecondUser = await userSerializer(secondUser);
-    const token = jwt.sign({ user: serializedSecondUser }, process.env.JWT_SECRET);
+    const token = jwt.sign({ currentUserId: secondUser.id }, process.env.JWT_SECRET);
 
     const res = await request(app)
       .put(`/users/${secondUser.id}`)
