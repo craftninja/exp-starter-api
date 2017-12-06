@@ -9,7 +9,7 @@ const userSerializer = require('../../serializers/user');
 
 describe('currentUser', () => {
   it('returns a User when passed a valid token', async () => {
-    const createdUser = await User.create({
+    const user = await User.create({
       firstName: 'Elowyn',
       lastName: 'Platzer Bartel',
       email: 'elowyn@example.com',
@@ -17,20 +17,21 @@ describe('currentUser', () => {
       student: true,
       password: 'password',
     });
-    const serializedUser = userSerializer(createdUser);
     const validToken = jwt.sign(
-      { user: serializedUser },
+      { currentUserId: user.id },
       process.env.JWT_SECRET
     );
 
-    const user = currentUser(validToken);
-    expect(user).toEqual(serializedUser);
+    const userCurrent = await currentUser(validToken);
+    const serializedUser = userSerializer(user);
+
+    expect(userCurrent).toEqual(serializedUser);
   });
 
   it('returns undefined when passed an invalid token', async () => {
     const invalidToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9';
 
-    const user = currentUser(invalidToken);
+    const user = await currentUser(invalidToken);
     expect(user).toEqual(undefined);
   });
 });
