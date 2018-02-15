@@ -11,6 +11,7 @@
     "db:migrate:test": "NODE_ENV=test node postgrator.js",
     "db:seed": "for file in ./seeds/*.js; do node $file; done",
     "db:seed:windows": "for %f in (./seeds/*) do node ./seeds/%f",
+    "db:createMigration": "node createMigrations.js",
     "lint": "eslint --ignore-path .gitignore .",
     "report": "nyc report --reporter=lcov",
     "start": "node ./bin/www",
