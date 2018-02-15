@@ -49,12 +49,12 @@ const createFile = fileName => {
 const getTimeStamp = () => {
   const currentDate = new Date();
   const timeStampTemplateMap = {
-    year: currentDate.getFullYear(),
-    month: round(currentDate.getMonth() + 1),
-    day: round(currentDate.getDate()),
-    hour: round(currentDate.getHours()),
-    minute: round(currentDate.getMinutes()),
-    second: round(currentDate.getSeconds()),
+    year: currentDate.getUTCFullYear(),
+    month: round(currentDate.getUTCMonth() + 1),
+    day: round(currentDate.getUTCDate()),
+    hour: round(currentDate.getUTCHours()),
+    minute: round(currentDate.getUTCMinutes()),
+    second: round(currentDate.getUTCSeconds()),
   };
   return formatTemplate(timeStampTemplateMap, config.timeStampTemplate);
 };
