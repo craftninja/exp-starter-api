@@ -197,4 +197,23 @@ describe('Users', () => {
 
     expect(res.body.user).toEqual({ errors: ['Email already taken'] });
   });
+
+  it('returns logged in user details at /me with valid jwt', async () => {
+    const user = await createUser({ email: 'user1@example.com ' });
+    const token = jwt.sign({ currentUserId: user.id }, process.env.JWT_SECRET);
+
+    const resInvalid = await request(app)
+      .get('/users/me')
+      .set('jwt', token + 'invalid')
+      .expect(404);
+
+    expect(resInvalid.body).toEqual({ error: { status: 404 }, message: 'Not Found' });
+
+    const resValid = await request(app)
+      .get('/users/me')
+      .set('jwt', token)
+      .expect(200);
+
+    expect(resValid.body.user.email).toEqual('user1@example.com');
+  });
 });

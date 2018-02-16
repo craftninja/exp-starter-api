@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 
+const currentUser = require('../lib/currentUser');
 const userSerializer = require('../serializers/user');
 const User = require('../models/user');
 
@@ -7,6 +8,12 @@ exports.index = async (req, res, next) => {
   const users = await User.all();
   const serializedUsers = users.map(user => userSerializer(user));
   res.json({ users: await Promise.all(serializedUsers) });
+};
+
+exports.me = async (req, res, next) => {
+  const token = req.headers.jwt;
+  const user = await currentUser(token);
+  res.json({ user: user });
 };
 
 exports.create = async (req, res, next) => {
