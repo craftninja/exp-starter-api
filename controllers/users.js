@@ -13,7 +13,8 @@ exports.index = async (req, res, next) => {
 exports.me = async (req, res, next) => {
   const token = req.headers.jwt;
   const user = await currentUser(token);
-  res.json({ user: user });
+  const serializedUser = await userSerializer(user);
+  res.json({ user: serializedUser });
 };
 
 exports.create = async (req, res, next) => {
