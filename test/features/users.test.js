@@ -6,7 +6,7 @@ require('../helpers/testSetup');
 
 const app = require('../../app');
 
-const createUser = require('../helpers/objectCreationMethods').createUser;
+const { createUser } = require('../helpers/objectCreationMethods');
 
 describe('Users', () => {
   it('can signup with unique email and receive a JWT', async () => {
@@ -178,7 +178,7 @@ describe('Users', () => {
       email: user.email,
       firstName: 'Elowyn',
       lastName: user.lastName,
-      student: user.student
+      student: user.student,
     });
   });
 
@@ -204,7 +204,7 @@ describe('Users', () => {
 
     const resInvalid = await request(app)
       .get('/users/me')
-      .set('jwt', token + 'invalid')
+      .set('jwt', `${token}invalid`)
       .expect(404);
 
     expect(resInvalid.body).toEqual({ error: { status: 404 }, message: 'Not Found' });

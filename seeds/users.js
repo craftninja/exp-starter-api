@@ -1,5 +1,5 @@
 if (process.env.NODE_ENV !== 'production') {
-  require('dotenv').config();
+  require('dotenv').config(); // eslint-disable-line import/no-extraneous-dependencies, global-require
 }
 
 const clearDB = require('../lib/clearDB');
@@ -17,7 +17,7 @@ clearDB().then(async () => {
   });
 
   /* eslint-disable no-console */
-  console.log(`Created user ${ beyonce.firstName } ${ beyonce.lastName }`);
+  console.log(`Created user ${beyonce.firstName} ${beyonce.lastName}`);
   /* eslint-enable no-console */
   await process.exit();
 });

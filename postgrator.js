@@ -1,5 +1,5 @@
 if (process.env.NODE_ENV !== 'production') {
-  require('dotenv').config();
+  require('dotenv').config(); // eslint-disable-line import/no-extraneous-dependencies, global-require
 }
 if (process.env.NODE_ENV === 'test') {
   process.env.DATABASE_URL = process.env.TEST_DATABASE_URL;
@@ -18,19 +18,15 @@ postgrator.setConfig({
 });
 
 // migrate to version specified, or supply 'max' to go all the way up
-postgrator.migrate(process.env.MIGRATE_TO, function(err, migrations) {
+postgrator.migrate(process.env.MIGRATE_TO, (err, migrations) => {
   /* eslint-disable no-console */
   if (err) {
     console.log(err);
-  } else {
-    if (migrations) {
-      console.log(
-        ['*******************']
-          .concat(migrations.map(migration => `checking ${migration.filename}`))
-          .join('\n')
-      );
-    }
+  } else if (migrations) {
+    console.log(['*******************']
+      .concat(migrations.map(migration => `checking ${migration.filename}`))
+      .join('\n'));
   }
   /* eslint-enable no-console */
-  postgrator.endConnection(() => {});
+  postgrator.endConnection(() => { });
 });
