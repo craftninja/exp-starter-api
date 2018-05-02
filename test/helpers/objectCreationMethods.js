@@ -24,5 +24,5 @@ exports.createUser = async overrides => {
     password: 'password',
   };
 
-  return await User.create({ ...defaults, ...overrides });
+  return User.create({ ...defaults, ...overrides });
 };

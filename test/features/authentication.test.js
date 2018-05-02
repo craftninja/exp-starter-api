@@ -5,7 +5,7 @@ require('../helpers/testSetup');
 
 const app = require('../../app');
 
-const createUser = require('../helpers/objectCreationMethods').createUser;
+const { createUser } = require('../helpers/objectCreationMethods');
 
 describe('Authentication - ', () => {
   it('users that log in receive JWT & their serialized user obj', async () => {
@@ -23,7 +23,7 @@ describe('Authentication - ', () => {
       id: user.id,
       firstName: user.firstName,
       lastName: user.lastName,
-      email: email,
+      email,
       birthYear: user.birthYear,
       student: user.student,
     });

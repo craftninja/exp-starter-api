@@ -4,20 +4,20 @@ const currentUser = require('../lib/currentUser');
 const userSerializer = require('../serializers/user');
 const User = require('../models/user');
 
-exports.index = async (req, res, next) => {
+exports.index = async (req, res) => {
   const users = await User.all();
   const serializedUsers = users.map(user => userSerializer(user));
   res.json({ users: await Promise.all(serializedUsers) });
 };
 
-exports.me = async (req, res, next) => {
+exports.me = async (req, res) => {
   const token = req.headers.jwt;
   const user = await currentUser(token);
   const serializedUser = await userSerializer(user);
   res.json({ user: serializedUser });
 };
 
-exports.create = async (req, res, next) => {
+exports.create = async (req, res) => {
   const user = await User.create(req.body);
   if (user.errors) {
     res.json({ user });
@@ -40,7 +40,7 @@ exports.show = async (req, res, next) => {
   }
 };
 
-exports.update = async (req, res, next) => {
+exports.update = async (req, res) => {
   const updatedUser = await User.update({
     ...req.body,
     ...{ id: req.params.id },

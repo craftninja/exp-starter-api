@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-const query = require('../db/index').query;
+const { query } = require('../db/index');
 
 const userSerializer = require('../serializers/user');
 
@@ -23,9 +23,8 @@ exports.authenticate = async credentials => {
     const serializedUser = await userSerializer(user);
     const token = jwt.sign({ currentUserId: user.id }, process.env.JWT_SECRET);
     return { jwt: token, user: serializedUser };
-  } else {
-    return { errors: ['Email or Password is incorrect'] };
   }
+  return { errors: ['Email or Password is incorrect'] };
 };
 
 exports.create = async properties => {
@@ -54,7 +53,7 @@ exports.create = async properties => {
       properties.birthYear,
       properties.student,
       passwordDigest,
-    ]
+    ],
   )).rows[0];
   return createdUser;
 };
@@ -70,21 +69,23 @@ exports.findBy = async property => {
   const key = Object.keys(property)[0];
   let findByQuery;
   switch (key) {
-  case 'firstName':
-    findByQuery = 'SELECT * FROM "users" WHERE "firstName" = $1 LIMIT 1';
-    break;
-  case 'lastName':
-    findByQuery = 'SELECT * FROM "users" WHERE "lastName" = $1 LIMIT 1';
-    break;
-  case 'email':
-    findByQuery = 'SELECT * FROM "users" WHERE "email" = $1 LIMIT 1';
-    break;
-  case 'birthYear':
-    findByQuery = 'SELECT * FROM "users" WHERE "birthYear" = $1 LIMIT 1';
-    break;
-  case 'student':
-    findByQuery = 'SELECT * FROM "users" WHERE "student" = $1 LIMIT 1';
-    break;
+    case 'firstName':
+      findByQuery = 'SELECT * FROM "users" WHERE "firstName" = $1 LIMIT 1';
+      break;
+    case 'lastName':
+      findByQuery = 'SELECT * FROM "users" WHERE "lastName" = $1 LIMIT 1';
+      break;
+    case 'email':
+      findByQuery = 'SELECT * FROM "users" WHERE "email" = $1 LIMIT 1';
+      break;
+    case 'birthYear':
+      findByQuery = 'SELECT * FROM "users" WHERE "birthYear" = $1 LIMIT 1';
+      break;
+    case 'student':
+      findByQuery = 'SELECT * FROM "users" WHERE "student" = $1 LIMIT 1';
+      break;
+    default:
+      break;
   }
 
   const value = property[key];
@@ -123,7 +124,7 @@ exports.update = async newProperties => {
       properties.student,
       properties.passwordDigest,
       properties.id,
-    ]
+    ],
   )).rows[0];
 
   return updatedUser;
@@ -137,7 +138,8 @@ async function validate(properties) {
   const errors = [];
 
   const existingEmailUser = await exports.findBy({ email: properties.email });
-  const thatEmailIsntMe = existingEmailUser ? existingEmailUser.id !== Number(properties.id) : false;
+  const thatEmailIsntMe = existingEmailUser ?
+    existingEmailUser.id !== Number(properties.id) : false;
   if (existingEmailUser && thatEmailIsntMe) {
     const error = 'Email already taken';
     errors.push(error);
@@ -146,4 +148,5 @@ async function validate(properties) {
   if (errors.length > 0) {
     return errors;
   }
+  return null;
 }

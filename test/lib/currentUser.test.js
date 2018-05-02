@@ -19,7 +19,7 @@ describe('currentUser', () => {
     });
     const validToken = jwt.sign(
       { currentUserId: user.id },
-      process.env.JWT_SECRET
+      process.env.JWT_SECRET,
     );
 
     const userCurrent = await currentUser(validToken);

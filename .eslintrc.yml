@@ -1,26 +1,14 @@
+extends: airbnb-base
 env:
   es6: true
   node: true
   mocha: true
-extends: 'eslint:recommended'
-parserOptions:
-  sourceType: module
-  ecmaVersion: 8
-  ecmaFeatures:
-    experimentalObjectRestSpread: true
 rules:
-  indent:
-    - error
-    - 2
   linebreak-style:
     - error
     - unix
-  quotes:
+  no-use-before-define:
+    - off
+  arrow-parens:
     - error
-    - single
-  semi:
-    - error
-    - always
-  no-unused-vars:
-    - error
-    - argsIgnorePattern: next
+    - as-needed
