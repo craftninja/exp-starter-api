@@ -1,8 +1,6 @@
 [![CircleCI](https://circleci.com/gh/craftninja/exp-starter-api.svg?style=shield)](https://circleci.com/gh/craftninja/exp-starter-api)
-[![Code Climate](https://codeclimate.com/github/craftninja/exp-starter-api/badges/gpa.svg)](https://codeclimate.com/github/craftninja/exp-starter-api)
-[![Test Coverage](https://codeclimate.com/github/craftninja/exp-starter-api/badges/coverage.svg)](https://codeclimate.com/github/craftninja/exp-starter-api/coverage)
-[![Issue Count](https://codeclimate.com/github/craftninja/exp-starter-api/badges/issue_count.svg)](https://codeclimate.com/github/craftninja/exp-starter-api)
-
+[![Maintainability](https://api.codeclimate.com/v1/badges/22b6bc7010e4643fce11/maintainability)](https://codeclimate.com/github/craftninja/exp-starter-api/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/22b6bc7010e4643fce11/test_coverage)](https://codeclimate.com/github/craftninja/exp-starter-api/test_coverage)
 
 # README
 

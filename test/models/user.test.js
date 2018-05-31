@@ -210,34 +210,4 @@ describe('User', () => {
     expect(foundUserByStudent.birthYear).toEqual(2015);
     expect(foundUserByStudent.student).toEqual(true);
   });
-
-  xit('can be found in multiple by property', async () => {
-    await User.create({
-      firstName: 'Elowyn',
-      lastName: 'Platzer Bartel',
-      email: 'elowyn@example.com',
-      birthYear: 2015,
-      student: true,
-      password: 'password',
-    });
-    await User.create({
-      firstName: 'Signe',
-      lastName: 'Alongi',
-      email: 'signe@example.com',
-      birthYear: 2015,
-      student: true,
-      password: 'password',
-    });
-    await User.create({
-      firstName: 'Alexa',
-      lastName: 'Madison',
-      email: 'Alexa@example.com',
-      birthYear: 2013,
-      student: true,
-      password: 'password',
-    });
-
-    const foundUsers = await User.where({ birthYear: 2017 });
-    expect(foundUsers.length).toEqual(2);
-  });
 });
