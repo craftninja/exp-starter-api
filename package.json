@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "engines": {
-    "node": ">=8.8.1"
+    "node": ">=11.0.10"
   },
   "scripts": {
     "coverage": "nyc mocha --recursive",
@@ -19,14 +19,15 @@
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
-    "body-parser": "~1.17.1",
+    "body-parser": "^1.18.3",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.3",
-    "express": "~4.15.2",
+    "express": "^4.16.4",
     "jsonwebtoken": "^8.0.1",
-    "morgan": "~1.8.1",
+    "morgan": "^1.9.1",
     "pg": "^7.3.0",
-    "postgrator": "^2.10.2"
+    "postgrator": "^2.10.2",
+    "yarn": "^1.10.1"
   },
   "devDependencies": {
     "dotenv": "^4.0.0",
@@ -34,7 +35,7 @@
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-import": "^2.9.0",
     "expect": "^21.1.0",
-    "mocha": "^3.5.3",
+    "mocha": "^5.2.0",
     "nyc": "^11.2.1",
     "supertest": "^3.0.0"
   }
