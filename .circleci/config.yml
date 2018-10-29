@@ -43,13 +43,14 @@ jobs:
       - run: yarn lint; yarn coverage; yarn report;
       - run: ./cc-test-reporter after-build -t lcov --exit-code $?
       - run: bash .circleci/setup-heroku.sh
-      - add_ssh_keys:
-          fingerprints:
-            - $HEROKU_SSH_FINGERPRINT
+      # - add_ssh_keys:
+      #     fingerprints:
+      #       - $HEROKU_SSH_FINGERPRINT
       - deploy:
           name: Deploy to Heroku if tests pass and branch is master
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              git push --force git@heroku.com:$HEROKU_APP_NAME.git HEAD:refs/heads/master
+              git push --force https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git master
+              # git push --force git@heroku.com:$HEROKU_APP_NAME.git HEAD:refs/heads/master
               # <any other necessary commands for heroku deployment you might need can go here>
             fi
