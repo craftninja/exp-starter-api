@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/node:10.12.0
+      - image: circleci/node:10.14.0
         environment:
           PGHOST: 127.0.0.1
           PGUSER: user
