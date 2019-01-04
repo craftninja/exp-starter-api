@@ -36,6 +36,10 @@ Test coverage and reports
 Linter alone
 1. `$ yarn lint`
 
+Run using docker
+1. `$ docker build -t exp-starter-api .` - build docker image 
+2. `$ docker run -p 3001:3001 exp-starter-api` - run docker image
+
 ### [curl docs](./curl.md)
 
 ### steeeel it
